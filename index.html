@@ -21,7 +21,7 @@
             --medium-bg: #1a1a1a;
             --light-bg: #2a2a2a;
             --text-color: #fff;
-            --text-secondary: #ccc;
+            --text-secondary: #ddd; /* Увеличил контрастность */
             --transition: all 0.3s ease;
         }
         
@@ -85,11 +85,12 @@
         nav a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600; /* Увеличил жирность */
             transition: var(--transition);
             position: relative;
             padding: 5px 0;
             cursor: pointer;
+            font-size: 16px; /* Увеличил размер */
         }
         
         nav a:hover, nav a.active {
@@ -131,6 +132,11 @@
             color: var(--text-color);
             width: 200px;
             outline: none;
+            font-size: 14px; /* Увеличил размер */
+        }
+        
+        .search-box input::placeholder {
+            color: #bbb; /* Улучшил видимость плейсхолдера */
         }
         
         .search-box button {
@@ -140,6 +146,7 @@
             color: white;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 600; /* Добавил жирность */
         }
         
         .search-box button:hover {
@@ -156,13 +163,14 @@
             border-radius: 20px;
             border: none;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
             transition: var(--transition);
+            font-size: 14px; /* Увеличил размер */
         }
         
         .btn-login {
             background: transparent;
-            border: 1px solid var(--primary-color);
+            border: 2px solid var(--primary-color); /* Увеличил толщину границы */
             color: var(--primary-color);
         }
         
@@ -237,12 +245,15 @@
         .hero-title {
             font-size: 2.5rem;
             margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Добавил тень для лучшей читаемости */
         }
         
         .hero-description {
             max-width: 600px;
             margin: 0 auto 20px;
             color: var(--text-secondary);
+            font-size: 1.1rem; /* Увеличил размер */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Добавил тень */
         }
         
         .hero-actions {
@@ -254,15 +265,16 @@
         .btn-play {
             background: var(--primary-color);
             color: white;
-            padding: 12px 30px;
+            padding: 14px 30px; /* Увеличил padding */
             border-radius: 30px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
             border: none;
             cursor: pointer;
             transition: var(--transition);
+            font-size: 16px; /* Увеличил размер */
         }
         
         .btn-play:hover {
@@ -273,16 +285,17 @@
         .btn-info {
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 12px 30px;
+            padding: 14px 30px; /* Увеличил padding */
             border-radius: 30px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
             backdrop-filter: blur(10px);
             border: none;
             cursor: pointer;
             transition: var(--transition);
+            font-size: 16px; /* Увеличил размер */
         }
         
         .btn-info:hover {
@@ -316,6 +329,7 @@
             padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 14px; /* Увеличил размер */
         }
         
         .movie-grid {
@@ -355,18 +369,19 @@
         }
         
         .movie-title {
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
             margin-bottom: 8px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 16px; /* Увеличил размер */
         }
         
         .movie-meta {
             display: flex;
             justify-content: space-between;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 14px; /* Увеличил размер */
         }
         
         .movie-rating {
@@ -374,6 +389,7 @@
             align-items: center;
             gap: 5px;
             color: var(--primary-color);
+            font-weight: 600; /* Добавил жирность */
         }
         
         .movie-duration {
@@ -426,10 +442,10 @@
         .genre-tag {
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 3px 8px;
+            padding: 4px 10px; /* Увеличил padding */
             border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 12px; /* Увеличил размер */
+            font-weight: 600; /* Добавил жирность */
         }
         
         /* Категории */
@@ -452,7 +468,7 @@
         }
         
         .category-btn {
-            padding: 8px 20px;
+            padding: 10px 20px; /* Увеличил padding */
             border-radius: 20px;
             background: var(--light-bg);
             border: none;
@@ -460,6 +476,8 @@
             cursor: pointer;
             white-space: nowrap;
             transition: var(--transition);
+            font-weight: 600; /* Добавил жирность */
+            font-size: 14px; /* Увеличил размер */
         }
         
         .category-btn.active, .category-btn:hover {
@@ -528,7 +546,7 @@
         
         .player-title {
             font-size: 1.2rem;
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
         }
         
         .close-player {
@@ -584,6 +602,7 @@
             padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 14px; /* Увеличил размер */
         }
         
         .watch-buttons {
@@ -592,7 +611,7 @@
         }
         
         .watch-btn {
-            padding: 8px 15px;
+            padding: 10px 15px; /* Увеличил padding */
             border-radius: 4px;
             border: none;
             cursor: pointer;
@@ -600,6 +619,8 @@
             align-items: center;
             gap: 5px;
             transition: var(--transition);
+            font-weight: 600; /* Добавил жирность */
+            font-size: 14px; /* Увеличил размер */
         }
         
         .watch-btn-primary {
@@ -631,6 +652,7 @@
         .similar-title {
             font-size: 1.2rem;
             margin-bottom: 15px;
+            font-weight: 700; /* Увеличил жирность */
         }
         
         .similar-grid {
@@ -658,6 +680,7 @@
             margin-bottom: 20px;
             position: relative;
             padding-bottom: 10px;
+            font-weight: 700; /* Увеличил жирность */
         }
         
         .footer-column h3::after {
@@ -683,10 +706,17 @@
             color: var(--text-secondary);
             text-decoration: none;
             transition: var(--transition);
+            font-size: 15px; /* Увеличил размер */
         }
         
         .footer-column a:hover {
             color: var(--primary-color);
+        }
+        
+        .footer-column p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px; /* Увеличил размер */
         }
         
         .social-links {
@@ -705,6 +735,7 @@
             justify-content: center;
             color: var(--text-color);
             transition: var(--transition);
+            font-size: 18px; /* Увеличил размер иконок */
         }
         
         .social-link:hover {
@@ -717,7 +748,7 @@
             padding-top: 20px;
             border-top: 1px solid var(--light-bg);
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 14px; /* Увеличил размер */
         }
         
         /* Адаптивность */
@@ -787,6 +818,14 @@
                 gap: 15px;
                 align-items: flex-start;
             }
+            
+            nav a {
+                font-size: 15px; /* Увеличил размер для мобильных */
+            }
+            
+            .btn {
+                padding: 12px 18px; /* Увеличил padding для мобильных */
+            }
         }
         
         @media (max-width: 576px) {
@@ -808,6 +847,7 @@
             
             .btn-play, .btn-info {
                 justify-content: center;
+                width: 100%; /* Полная ширина на мобильных */
             }
             
             .footer-content {
@@ -817,6 +857,11 @@
             .player-container {
                 width: 100%;
                 border-radius: 0;
+            }
+            
+            .category-btn {
+                padding: 8px 16px; /* Уменьшил padding для мобильных */
+                font-size: 13px; /* Уменьшил размер для мобильных */
             }
         }
 
@@ -920,6 +965,7 @@
         .details-title {
             font-size: 2rem;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Добавил тень */
         }
         
         .details-meta {
@@ -935,6 +981,7 @@
             gap: 5px;
             font-size: 0.9rem;
             color: var(--text-secondary);
+            font-weight: 600; /* Добавил жирность */
         }
         
         .details-actions {
@@ -951,6 +998,8 @@
         .details-description {
             margin-bottom: 20px;
             line-height: 1.7;
+            color: var(--text-secondary);
+            font-size: 16px; /* Увеличил размер */
         }
         
         .details-close {
@@ -1018,6 +1067,8 @@
         .modal-title {
             margin-bottom: 20px;
             text-align: center;
+            font-size: 1.5rem; /* Увеличил размер */
+            font-weight: 700; /* Увеличил жирность */
         }
         
         .form-group {
@@ -1027,7 +1078,8 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600; /* Увеличил жирность */
+            color: var(--text-color);
         }
         
         .form-group input {
@@ -1038,6 +1090,7 @@
             background: var(--medium-bg);
             color: white;
             transition: var(--transition);
+            font-size: 15px; /* Увеличил размер */
         }
         
         .form-group input:focus {
@@ -1053,8 +1106,9 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700; /* Увеличил жирность */
             transition: var(--transition);
+            font-size: 16px; /* Увеличил размер */
         }
         
         .form-submit:hover {
@@ -1065,12 +1119,14 @@
             margin-top: 20px;
             text-align: center;
             color: var(--text-secondary);
+            font-size: 15px; /* Увеличил размер */
         }
         
         .form-footer a {
             color: var(--primary-color);
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 600; /* Добавил жирность */
         }
         
         .form-footer a:hover {
@@ -1090,7 +1146,7 @@
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
-            transition: var(--transition;
+            transition: var(--transition);
         }
         
         .user-avatar:hover {
@@ -1098,7 +1154,8 @@
         }
         
         .user-name {
-            font-weight: 500;
+            font-weight: 600; /* Увеличил жирность */
+            font-size: 15px; /* Увеличил размер */
         }
         
         .dropdown {
@@ -1119,11 +1176,12 @@
         }
         
         .dropdown-item {
-            padding: 8px 15px;
+            padding: 10px 15px; /* Увеличил padding */
             color: var(--text-color);
             text-decoration: none;
             display: block;
             transition: var(--transition);
+            font-size: 14px; /* Увеличил размер */
         }
         
         .dropdown-item:hover {
@@ -1303,6 +1361,7 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
+            font-weight: 600; /* Добавил жирность */
         }
         
         /* Анимация для индикатора */
