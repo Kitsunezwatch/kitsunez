@@ -92,7 +92,7 @@
             cursor: pointer;
         }
         
-        nav a:hover {
+        nav a:hover, nav a.active {
             color: var(--primary-color);
         }
         
@@ -107,7 +107,7 @@
             transition: var(--transition);
         }
         
-        nav a:hover::after {
+        nav a:hover::after, nav a.active::after {
             width: 100%;
         }
         
@@ -672,6 +672,7 @@
         
         .footer-column ul {
             list-style: none;
+            padding: 0;
         }
         
         .footer-column ul li {
@@ -1089,7 +1090,7 @@
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--transition;
         }
         
         .user-avatar:hover {
@@ -1145,6 +1146,7 @@
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
+            display: none; /* Скрываем, так как оставляем только один плеер */
         }
         
         .status-btn {
@@ -1185,6 +1187,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            display: none; /* Скрываем выбор источника */
         }
         
         .source-btn {
@@ -1216,7 +1219,7 @@
             border: none;
             width: 40px;
             height: 40px;
-            borderRadius: 50%;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1308,38 +1311,6 @@
             70% { opacity: 1; }
             100% { opacity: 0; }
         }
-        
-        /* Стили для скрытия элементов YouTube */
-        .youtube-iframe {
-            position: relative;
-        }
-        
-        .youtube-iframe::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 5;
-            pointer-events: none;
-        }
-        
-        /* Скрытие логотипа YouTube */
-        .ytp-chrome-top-buttons {
-            display: none !important;
-        }
-        
-        /* Скрытие кнопки перехода на YouTube */
-        .ytp-title-link {
-            display: none !important;
-        }
-        
-        /* Скрытие водяного знака YouTube */
-        .ytp-watermark {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
@@ -1359,11 +1330,11 @@
                 
                 <nav>
                     <ul>
-                        <li><a href="#" onclick="return false;"><i class="fas fa-home"></i> Главная</a></li>
-                        <li><a href="#" onclick="return false;"><i class="fas fa-film"></i> Фильмы</a></li>
-                        <li><a href="#" onclick="return false;"><i class="fas fa-tv"></i> Сериалы</a></li>
-                        <li><a href="#" onclick="return false;"><i class="fas fa-dragon"></i> Аниме</a></li>
-                        <li><a href="#" id="favoritesLink" onclick="handleFavoritesClick(event)"><i class="fas fa-heart"></i> Избранное</a></li>
+                        <li><a href="#" class="active" data-section="home"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="#" data-section="movies"><i class="fas fa-film"></i> Фильмы</a></li>
+                        <li><a href="#" data-section="series"><i class="fas fa-tv"></i> Сериалы</a></li>
+                        <li><a href="#" data-section="anime"><i class="fas fa-dragon"></i> Аниме</a></li>
+                        <li><a href="#" id="favoritesLink" data-section="favorites"><i class="fas fa-heart"></i> Избранное</a></li>
                     </ul>
                 </nav>
                 
@@ -1388,11 +1359,11 @@
                             <img src="https://i.ibb.co/Sht7vLz/favicon.png" alt="Аватар" class="user-avatar" id="userAvatar">
                             <span class="user-name" id="userName">Пользователь</span>
                             <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="#" class="dropdown-item" id="profileLink" onclick="return false;"><i class="fas fa-user"></i> Профиль</a>
-                                <a href="#" class="dropdown-item" id="watchedLink" onclick="return false;"><i class="fas fa-check-circle"></i> Просмотрено</a>
-                                <a href="#" class="dropdown-item" id="watchlistLink" onclick="return false;"><i class="fas fa-bookmark"></i> Хочу посмотреть</a>
+                                <a href="#" class="dropdown-item" id="profileLink"><i class="fas fa-user"></i> Профиль</a>
+                                <a href="#" class="dropdown-item" id="watchedLink"><i class="fas fa-check-circle"></i> Просмотрено</a>
+                                <a href="#" class="dropdown-item" id="watchlistLink"><i class="fas fa-bookmark"></i> Хочу посмотреть</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item" id="logoutButton" onclick="return false;"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                                <a href="#" class="dropdown-item" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Выйти</a>
                             </div>
                         </div>
                     </div>
@@ -1409,10 +1380,10 @@
             <h1 class="hero-title">Добро пожаловать на Kitsunez</h1>
             <p class="hero-description">Лучшая стриминговая платформа с огромной коллекцией фильмов, сериалов и аниме.</p>
             <div class="hero-actions">
-                <button class="btn btn-play" onclick="alert('Функция в разработке')">
+                <button class="btn btn-play" id="startWatchingBtn">
                     <i class="fas fa-play"></i> Начать просмотр
                 </button>
-                <button class="btn btn-info">
+                <button class="btn btn-info" id="moreInfoBtn">
                     <i class="fas fa-info-circle"></i> Подробнее
                 </button>
             </div>
@@ -1478,13 +1449,13 @@
         <div class="player-container">
             <div class="player-header">
                 <div class="player-title" id="playerTitle">Название фильма</div>
-                <button class="close-player" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+                <button class="close-player" id="closePlayerBtn"><i class="fas fa-times"></i></button>
             </div>
             <div class="video-wrapper">
-                <div class="video-container youtube-iframe" id="videoContainer">
+                <div class="video-container" id="videoContainer">
                     <iframe id="playerFrame" width="100%" height="100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-                <button class="fullscreen-btn" onclick="toggleFullScreen()">
+                <button class="fullscreen-btn" id="playerFullscreenBtn">
                     <i class="fas fa-expand"></i>
                 </button>
             </div>
@@ -1516,7 +1487,7 @@
     <!-- Детали фильма -->
     <div class="movie-details" id="movieDetails">
         <div class="details-container">
-            <button class="details-close" onclick="closeMovieDetails()">
+            <button class="details-close" id="closeDetailsBtn">
                 <i class="fas fa-times"></i>
             </button>
             
@@ -1537,12 +1508,6 @@
                             <button class="btn btn-play" id="detailsPlayBtn">
                                 <i class="fas fa-play"></i> Смотреть
                             </button>
-                            <div class="status-buttons" id="statusButtons">
-                                <button class="status-btn" data-status="favorite"><i class="fas fa-heart"></i> В избранное</button>
-                                <button class="status-btn" data-status="watched"><i class="fas fa-check-circle"></i> Просмотрено</button>
-                                <button class="status-btn" data-status="watchlist"><i class="fas fa-bookmark"></i> Хочу посмотреть</button>
-                            </div>
-                            <div class="source-selector" id="sourceSelector"></div>
                         </div>
                     </div>
                 </div>
@@ -1558,7 +1523,7 @@
     <!-- Модальное окно входа -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+            <button class="modal-close" id="closeLoginModalBtn"><i class="fas fa-times"></i></button>
             <h2 class="modal-title">Вход в аккаунт</h2>
             <form id="loginForm">
                 <div class="form-group">
@@ -1572,7 +1537,7 @@
                 <button type="submit" class="form-submit">Войти</button>
             </form>
             <div class="form-footer">
-                Нет аккаунта? <a onclick="showRegisterModal()">Зарегистрироваться</a>
+                Нет аккаунта? <a id="showRegisterModalLink">Зарегистрироваться</a>
             </div>
         </div>
     </div>
@@ -1580,7 +1545,7 @@
     <!-- Модальное окно регистрации -->
     <div class="modal" id="registerModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('registerModal')"><i class="fas fa-times"></i></button>
+            <button class="modal-close" id="closeRegisterModalBtn"><i class="fas fa-times"></i></button>
             <h2 class="modal-title">Регистрация аккаунта</h2>
             <form id="registerForm">
                 <div class="form-group">
@@ -1602,7 +1567,7 @@
                 <button type="submit" class="form-submit">Зарегистрироваться</button>
             </form>
             <div class="form-footer">
-                Уже есть аккаунт? <a onclick="showLoginModal()">Войти</a>
+                Уже есть аккаунт? <a id="showLoginModalLink">Войти</a>
             </div>
         </div>
     </div>
@@ -1622,11 +1587,11 @@
                 <div class="footer-column">
                     <h3>Разделы</h3>
                     <ul>
-                        <li><a href="#" onclick="return false;">Фильмы</a></li>
-                        <li><a href="#" onclick="return false;">Сериалы</a></li>
-                        <li><a href="#" onclick="return false;">Аниме</a></li>
-                        <li><a href="#" onclick="return false;">Новинки</a></li>
-                        <li><a href="#" onclick="return false;">Топ-250</a></li>
+                        <li><a href="#" data-section="movies">Фильмы</a></li>
+                        <li><a href="#" data-section="series">Сериалы</a></li>
+                        <li><a href="#" data-section="anime">Аниме</a></li>
+                        <li><a href="#" data-section="new">Новинки</a></li>
+                        <li><a href="#" data-section="popular">Топ-250</a></li>
                     </ul>
                 </div>
             </div>
@@ -1649,7 +1614,6 @@
                 title: "Оглядись - аниме фильм",
                 poster: "https://images.kinorium.com/movie/shot/11159722/h280_54330844.jpg?21743992669",
                 backdrop: "https://images.kinorium.com/movie/slot/11159722/w1920_54330844.jpg?21743992669",
-                youtubeId: "SU46GSrDvKY",
                 googleDriveId: "1dzAHF1MtFV72yhUxKxlShTGqM0JqowDd",
                 duration: 58.21, // Длительность 58 минут 21 секунда
                 year: 2024,
@@ -1665,7 +1629,7 @@
         // Система пользователей
         let currentUser = null;
         let users = JSON.parse(localStorage.getItem('kitsunez_users')) || [];
-        let currentSource = 'player1'; // По умолчанию Плеер 1
+        let currentSection = 'home'; // Текущий раздел
         
         // Функции для работы с полноэкранным режимом
         function toggleFullscreenSite() {
@@ -1719,10 +1683,6 @@
         }
         
         // Обработчики событий полноэкранного режима
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('msfullscreenchange', handleFullscreenChange);
-        
         function handleFullscreenChange() {
             const fullscreenButton = document.getElementById('fullscreenButton');
             const icon = fullscreenButton.querySelector('i');
@@ -1842,31 +1802,6 @@
                 localStorage.setItem('kitsunez_users', JSON.stringify(users));
                 localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
             }
-            
-            // Обновляем кнопки статуса
-            updateStatusButtons(movieId);
-        }
-        
-        function updateStatusButtons(movieId) {
-            if (!currentUser) return;
-            
-            const statusButtons = document.querySelectorAll('.status-btn');
-            statusButtons.forEach(btn => {
-                const status = btn.dataset.status;
-                const statusMap = {
-                    'favorite': 'favorites',
-                    'watched': 'watched',
-                    'watchlist': 'watchlist'
-                };
-                
-                const listName = statusMap[status];
-                
-                if (currentUser[listName].includes(movieId)) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
         }
         
         function loadPersonalRecommendations() {
@@ -1876,7 +1811,7 @@
             const personalMovies = moviesData.filter(movie => {
                 // Если пользователь добавил фильм в избранное, ищем похожие
                 if (currentUser.favorites.length > 0) {
-                    const favoriteMovie = moviesData.find(m => m.youtubeId === currentUser.favorites[0]);
+                    const favoriteMovie = moviesData.find(m => m.googleDriveId === currentUser.favorites[0]);
                     if (favoriteMovie && movie.genres.some(genre => favoriteMovie.genres.includes(genre))) {
                         return true;
                     }
@@ -1904,33 +1839,25 @@
         }
         
         // Функции для видеоплеера
-        function openPlayer(title, youtubeId, googleDriveId, duration) {
+        function openPlayer(title, googleDriveId, duration) {
             const player = document.getElementById('videoPlayer');
             const playerTitle = document.getElementById('playerTitle');
             const playerFrame = document.getElementById('playerFrame');
-            const videoContainer = document.getElementById('videoContainer');
             
             playerTitle.textContent = title;
             
-            // Выбираем источник в зависимости от текущего выбора
-            if (currentSource === 'player1') {
-                // Используем параметры для скрытия элементов YouTube
-                playerFrame.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&fs=0&disablekb=1&controls=1&showinfo=0`;
-                videoContainer.classList.add('youtube-iframe');
-            } else if (currentSource === 'player2') {
-                playerFrame.src = `https://drive.google.com/file/d/${googleDriveId}/preview?embedded=true`;
-                videoContainer.classList.remove('youtube-iframe');
-            }
+            // Используем только Google Drive (Плеер 1)
+            playerFrame.src = `https://drive.google.com/file/d/${googleDriveId}/preview?embedded=true`;
             
             player.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             
             // Загрузка похожих фильмов
-            loadSimilarMovies(youtubeId);
+            loadSimilarMovies(googleDriveId);
             
             // Если пользователь авторизован, добавляем фильм в просмотренные
             if (currentUser) {
-                updateMovieStatus(youtubeId, 'watched', true);
+                updateMovieStatus(googleDriveId, 'watched', true);
             }
         }
         
@@ -2017,7 +1944,6 @@
             const genres = document.getElementById('detailsGenres');
             const description = document.getElementById('detailsDescription');
             const playBtn = document.getElementById('detailsPlayBtn');
-            const sourceSelector = document.getElementById('sourceSelector');
             
             // Заполнение данными
             backdrop.src = movie.backdrop || movie.poster;
@@ -2053,47 +1979,8 @@
             // Настройка кнопки воспроизведения
             playBtn.onclick = () => {
                 closeMovieDetails();
-                openPlayer(movie.title, movie.youtubeId, movie.googleDriveId, movie.duration);
+                openPlayer(movie.title, movie.googleDriveId, movie.duration);
             };
-            
-            // Настройка кнопки статуса
-            const statusButtons = document.querySelectorAll('.status-btn');
-            statusButtons.forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const status = btn.dataset.status;
-                    const isActive = btn.classList.contains('active');
-                    updateMovieStatus(movie.youtubeId, status, !isActive);
-                };
-            });
-            
-            // Обновляем состояние кнопок статуса
-            updateStatusButtons(movie.youtubeId);
-            
-            // Добавляем выбор источника, если есть оба варианта
-            sourceSelector.innerHTML = '';
-            if (movie.youtubeId && movie.googleDriveId) {
-                const player1Btn = document.createElement('button');
-                player1Btn.className = `source-btn ${currentSource === 'player1' ? 'active' : ''}`;
-                player1Btn.innerHTML = '<i class="fas fa-play-circle"></i> Плеер 1';
-                player1Btn.onclick = () => {
-                    currentSource = 'player1';
-                    document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
-                    player1Btn.classList.add('active');
-                };
-                
-                const player2Btn = document.createElement('button');
-                player2Btn.className = `source-btn ${currentSource === 'player2' ? 'active' : ''}`;
-                player2Btn.innerHTML = '<i class="fas fa-play-circle"></i> Плеер 2';
-                player2Btn.onclick = () => {
-                    currentSource = 'player2';
-                    document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
-                    player2Btn.classList.add('active');
-                };
-                
-                sourceSelector.appendChild(player1Btn);
-                sourceSelector.appendChild(player2Btn);
-            }
             
             details.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -2106,13 +1993,13 @@
         }
         
         // Загрузка похожих фильмов
-        function loadSimilarMovies(currentYoutubeId) {
+        function loadSimilarMovies(currentGoogleDriveId) {
             const similarContainer = document.getElementById('similarMovies');
             similarContainer.innerHTML = '';
             
             // Фильтруем фильмы, исключая текущий
             const similarMovies = moviesData
-                .filter(movie => movie.youtubeId !== currentYoutubeId)
+                .filter(movie => movie.googleDriveId !== currentGoogleDriveId)
                 .slice(0, 4);
             
             similarMovies.forEach(movie => {
@@ -2126,7 +2013,7 @@
                 `;
                 
                 similarMovieElement.addEventListener('click', () => {
-                    openPlayer(movie.title, movie.youtubeId, movie.googleDriveId, movie.duration);
+                    openPlayer(movie.title, movie.googleDriveId, movie.duration);
                 });
                 
                 similarContainer.appendChild(similarMovieElement);
@@ -2160,33 +2047,17 @@
                     durationText = hours > 0 ? `${hours}ч ${minutes}м` : `${minutes}м`;
                 }
                 
-                // Проверяем, находится ли фильм в списках пользователя
-                let isFavorite = false;
-                let isWatched = false;
-                let isInWatchlist = false;
-                
-                if (currentUser) {
-                    isFavorite = currentUser.favorites.includes(movie.youtubeId);
-                    isWatched = currentUser.watched.includes(movie.youtubeId);
-                    isInWatchlist = currentUser.watchlist.includes(movie.youtubeId);
-                }
-                
                 const movieElement = document.createElement('div');
                 movieElement.className = 'movie-card fade-in';
                 movieElement.innerHTML = `
                     <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
                     <div class="movie-actions">
-                        <button class="action-btn" onclick="openPlayer('${movie.title}', '${movie.youtubeId}', '${movie.googleDriveId}', ${movie.duration})">
+                        <button class="action-btn play-btn">
                             <i class="fas fa-play"></i>
                         </button>
-                        <button class="action-btn" onclick="openMovieDetails(${JSON.stringify(movie).replace(/"/g, '&quot;')})">
+                        <button class="action-btn info-btn">
                             <i class="fas fa-info"></i>
                         </button>
-                        ${currentUser ? `
-                        <button class="action-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); updateMovieStatus('${movie.youtubeId}', 'favorite', ${!isFavorite})">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        ` : ''}
                     </div>
                     <div class="movie-info">
                         <h3 class="movie-title">${movie.title}</h3>
@@ -2210,6 +2081,19 @@
                     if (!e.target.closest('.movie-actions')) {
                         openMovieDetails(movie);
                     }
+                });
+                
+                // Обработчики для кнопок действий
+                const playBtn = movieElement.querySelector('.play-btn');
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openPlayer(movie.title, movie.googleDriveId, movie.duration);
+                });
+                
+                const infoBtn = movieElement.querySelector('.info-btn');
+                infoBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openMovieDetails(movie);
                 });
                 
                 container.appendChild(movieElement);
@@ -2273,11 +2157,40 @@
             }
             
             const favoriteMovies = moviesData.filter(movie => 
-                currentUser.favorites.includes(movie.youtubeId)
+                currentUser.favorites.includes(movie.googleDriveId)
             );
             
             renderMovies(favoriteMovies, 'popularMovies');
             document.querySelector('.section-title').innerHTML = `<i class="fas fa-heart"></i> Избранное`;
+        }
+        
+        // Переключение разделов
+        function switchSection(section) {
+            currentSection = section;
+            
+            // Обновляем активное состояние в навигации
+            document.querySelectorAll('nav a').forEach(link => {
+                if (link.dataset.section === section) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Показываем соответствующий контент
+            if (section === 'home') {
+                renderMovies(moviesData, 'popularMovies');
+                renderMovies(moviesData.filter(movie => movie.year >= 2023), 'newMovies');
+                renderMovies(moviesData.filter(movie => movie.rating >= 8.0), 'recommendedMovies');
+                document.querySelector('.section-title').innerHTML = `<i class="fas fa-fire"></i> Популярные фильмы`;
+            } else if (section === 'favorites') {
+                handleFavoritesClick({preventDefault: () => {}});
+            } else {
+                // Для других разделов просто фильтруем по категории
+                const filteredMovies = moviesData.filter(movie => movie.category === section);
+                renderMovies(filteredMovies, 'popularMovies');
+                document.querySelector('.section-title').innerHTML = `<i class="fas fa-film"></i> ${section.charAt(0).toUpperCase() + section.slice(1)}`;
+            }
         }
         
         // Инициализация при загрузке страницы
@@ -2406,7 +2319,7 @@
                 }
                 
                 const watchedMovies = moviesData.filter(movie => 
-                    currentUser.watched.includes(movie.youtubeId)
+                    currentUser.watched.includes(movie.googleDriveId)
                 );
                 
                 renderMovies(watchedMovies, 'popularMovies');
@@ -2421,7 +2334,7 @@
                 }
                 
                 const watchlistMovies = moviesData.filter(movie => 
-                    currentUser.watchlist.includes(movie.youtubeId)
+                    currentUser.watchlist.includes(movie.googleDriveId)
                 );
                 
                 renderMovies(watchlistMovies, 'popularMovies');
@@ -2460,6 +2373,71 @@
                     closeMovieDetails();
                 }
             });
+            
+            // Кнопка закрытия плеера
+            document.getElementById('closePlayerBtn').addEventListener('click', closePlayer);
+            
+            // Кнопка закрытия деталей фильма
+            document.getElementById('closeDetailsBtn').addEventListener('click', closeMovieDetails);
+            
+            // Кнопка полноэкранного режима плеера
+            document.getElementById('playerFullscreenBtn').addEventListener('click', toggleFullScreen);
+            
+            // Кнопка начала просмотра
+            document.getElementById('startWatchingBtn').addEventListener('click', function() {
+                if (moviesData.length > 0) {
+                    openPlayer(moviesData[0].title, moviesData[0].googleDriveId, moviesData[0].duration);
+                }
+            });
+            
+            // Кнопка подробнее
+            document.getElementById('moreInfoBtn').addEventListener('click', function() {
+                if (moviesData.length > 0) {
+                    openMovieDetails(moviesData[0]);
+                }
+            });
+            
+            // Навигация по разделам
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+            });
+            
+            // Навигация в футере
+            document.querySelectorAll('.footer-column a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    if (section) {
+                        switchSection(section);
+                    }
+                });
+            });
+            
+            // Модальные окна
+            document.getElementById('closeLoginModalBtn').addEventListener('click', function() {
+                closeModal('loginModal');
+            });
+            
+            document.getElementById('closeRegisterModalBtn').addEventListener('click', function() {
+                closeModal('registerModal');
+            });
+            
+            document.getElementById('showRegisterModalLink').addEventListener('click', function() {
+                showRegisterModal();
+            });
+            
+            document.getElementById('showLoginModalLink').addEventListener('click', function() {
+                showLoginModal();
+            });
+            
+            // Обработчики событий полноэкранного режима
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('msfullscreenchange', handleFullscreenChange);
         });
 
         // Эмуляция YouTube API (в реальном приложении нужно использовать настоящий API)
