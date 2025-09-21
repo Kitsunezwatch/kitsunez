@@ -89,6 +89,7 @@
             transition: var(--transition);
             position: relative;
             padding: 5px 0;
+            cursor: pointer;
         }
         
         nav a:hover {
@@ -1215,7 +1216,7 @@
             border: none;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            borderRadius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1308,21 +1309,36 @@
             100% { opacity: 0; }
         }
         
-        /* Стили для скрытия элементов Google Drive */
-        .google-drive-iframe {
+        /* Стили для скрытия элементов YouTube */
+        .youtube-iframe {
             position: relative;
         }
         
-        .google-drive-iframe::after {
+        .youtube-iframe::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 50px;
-            background: var(--dark-bg);
+            height: 100%;
+            background: transparent;
             z-index: 5;
             pointer-events: none;
+        }
+        
+        /* Скрытие логотипа YouTube */
+        .ytp-chrome-top-buttons {
+            display: none !important;
+        }
+        
+        /* Скрытие кнопки перехода на YouTube */
+        .ytp-title-link {
+            display: none !important;
+        }
+        
+        /* Скрытие водяного знака YouTube */
+        .ytp-watermark {
+            display: none !important;
         }
     </style>
 </head>
@@ -1343,11 +1359,11 @@
                 
                 <nav>
                     <ul>
-                        <li><a href="#"><i class="fas fa-home"></i> Главная</a></li>
-                        <li><a href="#"><i class="fas fa-film"></i> Фильмы</a></li>
-                        <li><a href="#"><i class="fas fa-tv"></i> Сериалы</a></li>
-                        <li><a href="#"><i class="fas fa-dragon"></i> Аниме</a></li>
-                        <li><a href="#" id="favoritesLink"><i class="fas fa-heart"></i> Избранное</a></li>
+                        <li><a href="#" onclick="return false;"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="#" onclick="return false;"><i class="fas fa-film"></i> Фильмы</a></li>
+                        <li><a href="#" onclick="return false;"><i class="fas fa-tv"></i> Сериалы</a></li>
+                        <li><a href="#" onclick="return false;"><i class="fas fa-dragon"></i> Аниме</a></li>
+                        <li><a href="#" id="favoritesLink" onclick="handleFavoritesClick(event)"><i class="fas fa-heart"></i> Избранное</a></li>
                     </ul>
                 </nav>
                 
@@ -1372,11 +1388,11 @@
                             <img src="https://i.ibb.co/Sht7vLz/favicon.png" alt="Аватар" class="user-avatar" id="userAvatar">
                             <span class="user-name" id="userName">Пользователь</span>
                             <div class="dropdown-menu" id="dropdownMenu">
-                                <a href="#" class="dropdown-item" id="profileLink"><i class="fas fa-user"></i> Профиль</a>
-                                <a href="#" class="dropdown-item" id="watchedLink"><i class="fas fa-check-circle"></i> Просмотрено</a>
-                                <a href="#" class="dropdown-item" id="watchlistLink"><i class="fas fa-bookmark"></i> Хочу посмотреть</a>
+                                <a href="#" class="dropdown-item" id="profileLink" onclick="return false;"><i class="fas fa-user"></i> Профиль</a>
+                                <a href="#" class="dropdown-item" id="watchedLink" onclick="return false;"><i class="fas fa-check-circle"></i> Просмотрено</a>
+                                <a href="#" class="dropdown-item" id="watchlistLink" onclick="return false;"><i class="fas fa-bookmark"></i> Хочу посмотреть</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                                <a href="#" class="dropdown-item" id="logoutButton" onclick="return false;"><i class="fas fa-sign-out-alt"></i> Выйти</a>
                             </div>
                         </div>
                     </div>
@@ -1465,7 +1481,7 @@
                 <button class="close-player" onclick="closePlayer()"><i class="fas fa-times"></i></button>
             </div>
             <div class="video-wrapper">
-                <div class="video-container" id="videoContainer">
+                <div class="video-container youtube-iframe" id="videoContainer">
                     <iframe id="playerFrame" width="100%" height="100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
                 <button class="fullscreen-btn" onclick="toggleFullScreen()">
@@ -1553,7 +1569,7 @@
                     <label for="loginPassword">Пароль</label>
                     <input type="password" id="loginPassword" required>
                 </div>
-                <button type="submit", class="form-submit">Войти</button>
+                <button type="submit" class="form-submit">Войти</button>
             </form>
             <div class="form-footer">
                 Нет аккаунта? <a onclick="showRegisterModal()">Зарегистрироваться</a>
@@ -1568,7 +1584,7 @@
             <h2 class="modal-title">Регистрация аккаунта</h2>
             <form id="registerForm">
                 <div class="form-group">
-                    <label for="registerName">Имя</label>
+                    <label for="registerName">Имя пользователя</label>
                     <input type="text" id="registerName" required>
                 </div>
                 <div class="form-group">
@@ -1606,11 +1622,11 @@
                 <div class="footer-column">
                     <h3>Разделы</h3>
                     <ul>
-                        <li><a href="#">Фильмы</a></li>
-                        <li><a href="#">Сериалы</a></li>
-                        <li><a href="#">Аниме</a></li>
-                        <li><a href="#">Новинки</a></li>
-                        <li><a href="#">Топ-250</a></li>
+                        <li><a href="#" onclick="return false;">Фильмы</a></li>
+                        <li><a href="#" onclick="return false;">Сериалы</a></li>
+                        <li><a href="#" onclick="return false;">Аниме</a></li>
+                        <li><a href="#" onclick="return false;">Новинки</a></li>
+                        <li><a href="#" onclick="return false;">Топ-250</a></li>
                     </ul>
                 </div>
             </div>
@@ -1722,9 +1738,14 @@
         
         // Функции для работы с пользователями
         function registerUser(name, email, password) {
-            // Проверяем, нет ли уже пользователя с таким email
+            // Проверяем, нет ли уже пользователя с таким email или именем
             if (users.find(user => user.email === email)) {
                 alert('Пользователь с таким email уже существует');
+                return false;
+            }
+            
+            if (users.find(user => user.name === name)) {
+                alert('Пользователь с таким именем уже существует');
                 return false;
             }
             
@@ -1893,11 +1914,12 @@
             
             // Выбираем источник в зависимости от текущего выбора
             if (currentSource === 'player1') {
-                playerFrame.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0`;
-                videoContainer.classList.remove('google-drive-iframe');
+                // Используем параметры для скрытия элементов YouTube
+                playerFrame.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0&fs=0&disablekb=1&controls=1&showinfo=0`;
+                videoContainer.classList.add('youtube-iframe');
             } else if (currentSource === 'player2') {
                 playerFrame.src = `https://drive.google.com/file/d/${googleDriveId}/preview?embedded=true`;
-                videoContainer.classList.add('google-drive-iframe');
+                videoContainer.classList.remove('youtube-iframe');
             }
             
             player.style.display = 'flex';
@@ -2242,6 +2264,22 @@
             );
         }
         
+        // Обработчик клика на избранное
+        function handleFavoritesClick(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            const favoriteMovies = moviesData.filter(movie => 
+                currentUser.favorites.includes(movie.youtubeId)
+            );
+            
+            renderMovies(favoriteMovies, 'popularMovies');
+            document.querySelector('.section-title').innerHTML = `<i class="fas fa-heart"></i> Избранное`;
+        }
+        
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Проверяем, есть ли авторизованный пользователь
@@ -2360,21 +2398,6 @@
             });
             
             // Ссылки на личные списки
-            document.getElementById('favoritesLink').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!currentUser) {
-                    showLoginModal();
-                    return;
-                }
-                
-                const favoriteMovies = moviesData.filter(movie => 
-                    currentUser.favorites.includes(movie.youtubeId)
-                );
-                
-                renderMovies(favoriteMovies, 'popularMovies');
-                document.querySelector('.section-title').innerHTML = `<i class="fas fa-heart"></i> Избранное`;
-            });
-            
             document.getElementById('watchedLink').addEventListener('click', function(e) {
                 e.preventDefault();
                 if (!currentUser) {
