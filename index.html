@@ -1994,6 +1994,41 @@
 
     
 
+<!-- Видеоплеер (модальное окно) -->
+<div class="video-player" id="videoPlayer" aria-hidden="true">
+  <div class="player-container" role="dialog" aria-modal="true" aria-label="Видеоплеер">
+    <div class="player-header">
+      <div class="player-title" id="playerTitle">Плеер 1</div>
+      <div>
+        <button class="close-player" id="closePlayerBtn" title="Закрыть"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+
+    
+<div class="video-area" id="videoArea">
+  <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+    <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+      <iframe src="https://fast.wistia.net/embed/iframe/ul4a4br5ck?seo=false&videoFoam=true"
+        title="Оглянись" allow="autoplay; fullscreen" allowfullscreen frameborder="0" scrolling="no"
+        class="wistia_embed" name="wistia_embed"
+        style="height:100%;width:100%;position:absolute;top:0;left:0;">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Wistia script -->
+<script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
+
+
+    <div class="player-controls">
+      <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+        <button class="fullscreen-btn" id="playerFullscreenBtn" title="Полноэкранный режим"><i class="fas fa-expand"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Wistia external script -->
 <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
 
@@ -2039,12 +2074,7 @@
                 </div>
             </div>
             
-            
-            <!-- Встроенный плеер внутри деталей (сначала скрыт) -->
-            <div id="detailsPlayerWrap" class="video-container" style="display:none;margin:20px;padding-bottom:56.25%;position:relative;">
-                <iframe id="detailsPlayerFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
-            </div>
-<div class="details-content">
+            <div class="details-content">
                 <h3>Описание</h3>
                 <p class="details-description" id="detailsDescription"></p>
                 
@@ -2217,7 +2247,7 @@
         // Данные фильмов
         const moviesData = [
             {
-                title: "Оглянись - аниме фильм",
+                title: "Оглядись - аниме фильм",
                 poster: "https://images.kinorium.com/movie/shot/11159722/h280_54330844.jpg?21743992669",
                 backdrop: "https://images.kinorium.com/movie/slot/11159722/w1920_54330844.jpg?21743992669",
                 googleDriveId: "1dzAHF1MtFV72yhUxKxlShTGqM0JqowDd",
@@ -2646,22 +2676,6 @@
                 loginToComment.style.display = 'block';
             }
             
-
-            // Установим поведение кнопки "Смотреть" в деталях: показать встроенный плеер (Wistia) внутри модалки деталей
-            if (playBtn) {
-                playBtn.onclick = function(e) {
-                    e.stopPropagation();
-                    const dp = document.getElementById('detailsPlayerWrap');
-                    const df = document.getElementById('detailsPlayerFrame');
-                    const wistiaUrl = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
-                    if (df) df.src = wistiaUrl;
-                    if (dp) dp.style.display = 'block';
-                    // прокрутить к плееру внутри модалки
-                    setTimeout(() => {
-                        dp.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 200);
-                };
-            }
             details.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
