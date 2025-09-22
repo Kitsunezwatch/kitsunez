@@ -1795,6 +1795,79 @@
             gap: 10px;
             margin-top: 10px;
         }
+        
+        /* Стили для рейтинга (звезд) */
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+            margin-top: 5px;
+        }
+        
+        .rating-stars i {
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .rating-stars i.active {
+            color: gold;
+        }
+        
+        .rating-stars i:hover {
+            color: orange;
+        }
+        
+        .user-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .rating-value {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .favorite-btn.active i {
+            color: red !important;
+        }
+        
+        /* Стили для кнопок действий пользователя */
+        .user-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .user-action-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .user-action-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .user-action-btn:not(.active) {
+            background: var(--light-bg);
+            color: var(--text-secondary);
+        }
+        
+        .user-action-btn:not(.active):hover {
+            background: var(--primary-color);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -1846,6 +1919,7 @@
                                 <a href="#" class="dropdown-item" id="profileLink"><i class="fas fa-user"></i> Профиль</a>
                                 <a href="#" class="dropdown-item" id="watchedLink"><i class="fas fa-check-circle"></i> Просмотрено</a>
                                 <a href="#" class="dropdown-item" id="watchlistLink"><i class="fas fa-bookmark"></i> Хочу посмотреть</a>
+                                <a href="#" class="dropdown-item" id="ratingsLink"><i class="fas fa-star"></i> Мои оценки</a>
                                 <div class="dropdown-divider" id="adminDivider" style="display: none;"></div>
                                 <a href="#" class="dropdown-item admin-menu-item" id="adminLink" style="display: none;">
                                     <i class="fas fa-crown"></i> Панель администратора
@@ -1992,19 +2066,35 @@
         </div>
     </main>
 
-    
+    <!-- Wistia external script -->
+    <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
 
-<!-- Wistia external script -->
-<script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
-
-
-
-            
-            <!-- Похожие фильмы -->
-            <div class="similar-movies">
-                <h3 class="similar-title">Похожие фильмы</h3>
-                <div class="similar-grid" id="similarMovies">
-                    <!-- Похожие фильмы будут добавлены динамически -->
+    <!-- Исправленный видеоплеер -->
+    <div id="videoPlayer" class="video-player">
+        <div class="player-container">
+            <div class="player-header">
+                <div class="player-title" id="playerTitle">Плеер</div>
+                <button class="close-player" id="closePlayerBtn" title="Закрыть плеер">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="video-container">
+                <iframe id="wistiaFrame" src="" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen 
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
+                </iframe>
+            </div>
+            <div class="player-controls">
+                <div class="quality-selector">
+                    <select>
+                        <option>Авто</option>
+                    </select>
+                </div>
+                <div class="watch-buttons">
+                    <button class="watch-btn watch-btn-secondary" id="playerFullscreenBtn" title="Во весь экран">
+                        <i class="fas fa-expand"></i> Полный экран
+                    </button>
                 </div>
             </div>
         </div>
@@ -2030,6 +2120,24 @@
                             <span class="details-meta-item" id="detailsAgeRating"></span>
                         </div>
                         <div class="movie-genres" id="detailsGenres"></div>
+                        <div class="user-action-buttons">
+                            <button class="user-action-btn" id="detailsFavoriteBtn">
+                                <i class="fas fa-heart"></i> В избранное
+                            </button>
+                            <button class="user-action-btn" id="detailsWatchedBtn">
+                                <i class="fas fa-check-circle"></i> Просмотрено
+                            </button>
+                            <button class="user-action-btn" id="detailsWatchlistBtn">
+                                <i class="fas fa-bookmark"></i> Буду смотреть
+                            </button>
+                        </div>
+                        <div class="rating-stars" id="detailsRatingStars">
+                            <i class="fas fa-star" data-rating="1"></i>
+                            <i class="fas fa-star" data-rating="2"></i>
+                            <i class="fas fa-star" data-rating="3"></i>
+                            <i class="fas fa-star" data-rating="4"></i>
+                            <i class="fas fa-star" data-rating="5"></i>
+                        </div>
                         <div class="details-actions">
                             <button class="btn btn-play" id="detailsPlayBtn">
                                 <i class="fas fa-play"></i> Смотреть
@@ -2039,12 +2147,12 @@
                 </div>
             </div>
             
-            
             <!-- Встроенный плеер внутри деталей (сначала скрыт) -->
             <div id="detailsPlayerWrap" class="video-container" style="display:none;margin:20px;padding-bottom:56.25%;position:relative;">
                 <iframe id="detailsPlayerFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
             </div>
-<div class="details-content">
+            
+            <div class="details-content">
                 <h3>Описание</h3>
                 <p class="details-description" id="detailsDescription"></p>
                 
@@ -2150,12 +2258,17 @@
                     <div class="stat-value" id="watchlistCount">0</div>
                     <div class="stat-label">Буду смотреть</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ratingsCount">0</div>
+                    <div class="stat-label">Оценок поставлено</div>
+                </div>
             </div>
 
             <div class="profile-tabs">
                 <button class="profile-tab active" data-tab="favorites">Избранное</button>
                 <button class="profile-tab" data-tab="watched">Просмотрено</button>
                 <button class="profile-tab" data-tab="watchlist">Хочу посмотреть</button>
+                <button class="profile-tab" data-tab="ratings">Мои оценки</button>
             </div>
 
             <div class="tab-content active" id="favoritesTab">
@@ -2173,6 +2286,12 @@
             <div class="tab-content" id="watchlistTab">
                 <div class="movie-grid" id="profileWatchlistList">
                     <!-- Фильмы для просмотра будут загружены динамически -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="ratingsTab">
+                <div class="movie-grid" id="profileRatingsList">
+                    <!-- Фильмы с оценками будут загружены динамически -->
                 </div>
             </div>
         </div>
@@ -2330,6 +2449,7 @@
                 favorites: [],
                 watched: [],
                 watchlist: [],
+                ratings: {}, // Новое поле для оценок
                 preferences: {
                     genres: [],
                     minRating: 0
@@ -2353,6 +2473,10 @@
             
             if (user) {
                 currentUser = user;
+                // Инициализируем ratings, если их нет
+                if (!currentUser.ratings) {
+                    currentUser.ratings = {};
+                }
                 localStorage.setItem('kitsunez_current_user', JSON.stringify(user));
                 updateUIForUser();
                 closeModal('loginModal');
@@ -2448,6 +2572,72 @@
                 localStorage.setItem('kitsunez_users', JSON.stringify(users));
                 localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
             }
+        
+            // Обновляем UI сразу после изменения списка
+            try {
+                updateUIForUser();
+            } catch(e){ console.warn('updateUIForUser error:', e); }
+            
+            // Если открыт раздел Избранное — обновим отображение
+            try {
+                if (typeof currentSection !== 'undefined' && currentSection === 'favorites') {
+                    handleFavoritesClick({preventDefault: () => {}});
+                }
+            } catch(e){ console.warn('refresh favorites error:', e); }
+            
+            // Если открыт профиль — обновим вкладку избранного
+            try {
+                const pm = document.getElementById('profileModal');
+                if (pm && pm.style.display === 'flex') {
+                    loadProfileMovies('favorites');
+                }
+            } catch(e){ console.warn('loadProfileMovies error:', e); }
+        }
+        
+        // Функция для обновления оценки фильма
+        function updateMovieRating(movieId, rating) {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            if (!currentUser.ratings) {
+                currentUser.ratings = {};
+            }
+            
+            currentUser.ratings[movieId] = rating;
+            
+            // Сохраняем в общем списке пользователей
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('kitsunez_users', JSON.stringify(users));
+                localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
+            }
+            
+            // Обновляем UI
+            updateUIForUser();
+        }
+        
+        // Функция для получения оценки пользователя для фильма
+        function getUserRating(movieId) {
+            if (!currentUser || !currentUser.ratings) return 0;
+            return currentUser.ratings[movieId] || 0;
+        }
+        
+        // Функция для получения среднего рейтинга фильма
+        function getAverageRating(movieId) {
+            let total = 0;
+            let count = 0;
+            
+            users.forEach(user => {
+                if (user.ratings && user.ratings[movieId]) {
+                    total += user.ratings[movieId];
+                    count++;
+                }
+            });
+            
+            return count > 0 ? (total / count).toFixed(1) : 0;
         }
         
         function loadPersonalRecommendations() {
@@ -2485,11 +2675,11 @@
         function openPlayer(title, googleDriveId, duration) {
             const player = document.getElementById('videoPlayer');
             const playerTitle = document.getElementById('playerTitle');
-            const playerFrame = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
+            const playerFrame = document.getElementById('wistiaFrame');
 
             playerTitle.textContent = title;
 
-            // Всегда открываем Wistia-канал, как вы просили
+            // Используем Wistia-канал как было раньше
             const wistiaUrl = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
             if (playerFrame) {
                 playerFrame.src = wistiaUrl;
@@ -2515,16 +2705,22 @@
 
         function closePlayer() {
             const player = document.getElementById('videoPlayer');
-            const playerFrame = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
+            const playerFrame = document.getElementById('wistiaFrame');
 
             if (player) {
                 player.style.display = 'none';
             }
             if (playerFrame) {
-                try { playerFrame.src = ''; } catch (e) { console.warn(e); }
+                try { 
+                    // Останавливаем видео
+                    playerFrame.src = playerFrame.src;
+                } catch (e) { 
+                    console.warn(e); 
+                }
             }
             document.body.style.overflow = 'auto';
 
+            // Выходим из полноэкранного режима если активен
             if (document.fullscreenElement) {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -2535,10 +2731,11 @@
                 }
             }
         }
-               
+
         function toggleFullScreen() {
             const playerContainer = document.querySelector('.player-container');
-            const fullscreenBtn = document.querySelector('.fullscreen-btn i');
+            const fullscreenBtn = document.getElementById('playerFullscreenBtn');
+            const icon = fullscreenBtn.querySelector('i');
             
             if (!document.fullscreenElement) {
                 if (playerContainer.requestFullscreen) {
@@ -2549,8 +2746,8 @@
                     playerContainer.msRequestFullscreen();
                 }
                 
-                fullscreenBtn.classList.remove('fa-expand');
-                fullscreenBtn.classList.add('fa-compress');
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -2560,29 +2757,24 @@
                     document.msExitFullscreen();
                 }
                 
-                fullscreenBtn.classList.remove('fa-compress');
-                fullscreenBtn.classList.add('fa-expand');
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
             }
         }
-        
-        function setupDoubleClickFullscreen() {
-            const videoWrapper = document.querySelector('.video-wrapper');
-            if (videoWrapper) {
-                videoWrapper.addEventListener('dblclick', toggleFullScreen);
-            }
-        }
-        
+
         function handlePlayerFullScreenChange() {
-            const fullscreenBtn = document.querySelector('.fullscreen-btn i');
+            const fullscreenBtn = document.getElementById('playerFullscreenBtn');
+            const icon = fullscreenBtn.querySelector('i');
+            
             if (document.fullscreenElement) {
-                fullscreenBtn.classList.remove('fa-expand');
-                fullscreenBtn.classList.add('fa-compress');
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
             } else {
-                fullscreenBtn.classList.remove('fa-compress');
-                fullscreenBtn.classList.add('fa-expand');
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
             }
         }
-        
+
         // Функции для деталей фильма
         function openMovieDetails(movie) {
             const details = document.getElementById('movieDetails');
@@ -2610,7 +2802,7 @@
                 duration.textContent = hours > 0 ? `${hours}ч ${minutes}м` : `${minutes}м`;
             }
             
-            rating.innerHTML = `<i class="fas fa-star"></i> ${movie.rating}`;
+            rating.innerHTML = `<i class="fas fa-star"></i> ${getAverageRating(movie.googleDriveId)}`;
             ageRating.textContent = movie.ageRating;
             
             genres.innerHTML = '';
@@ -2624,6 +2816,12 @@
             }
             
             description.textContent = movie.description;
+            
+            // Обновляем кнопки статусов
+            updateDetailsButtons(movie.googleDriveId);
+            
+            // Обновляем звезды рейтинга
+            updateDetailsRatingStars(movie.googleDriveId);
             
             playBtn.onclick = () => {
                 closeMovieDetails();
@@ -2646,8 +2844,7 @@
                 loginToComment.style.display = 'block';
             }
             
-
-            // Установим поведение кнопки "Смотреть" в деталях: показать встроенный плеер (Wistia) внутри модалки деталей
+            // Установим поведение кнопки "Смотреть" в деталях
             if (playBtn) {
                 playBtn.onclick = function(e) {
                     e.stopPropagation();
@@ -2664,6 +2861,84 @@
             }
             details.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+        }
+        
+        // Обновление кнопок статусов в деталях фильма
+        function updateDetailsButtons(movieId) {
+            if (!currentUser) return;
+            
+            const favoriteBtn = document.getElementById('detailsFavoriteBtn');
+            const watchedBtn = document.getElementById('detailsWatchedBtn');
+            const watchlistBtn = document.getElementById('detailsWatchlistBtn');
+            
+            // Сбрасываем активные классы
+            favoriteBtn.classList.remove('active');
+            watchedBtn.classList.remove('active');
+            watchlistBtn.classList.remove('active');
+            
+            // Устанавливаем активные классы в зависимости от статуса
+            if (currentUser.favorites.includes(movieId)) {
+                favoriteBtn.classList.add('active');
+            }
+            if (currentUser.watched.includes(movieId)) {
+                watchedBtn.classList.add('active');
+            }
+            if (currentUser.watchlist.includes(movieId)) {
+                watchlistBtn.classList.add('active');
+            }
+            
+            // Добавляем обработчики событий
+            favoriteBtn.onclick = () => {
+                const isFavorite = currentUser.favorites.includes(movieId);
+                updateMovieStatus(movieId, 'favorite', !isFavorite);
+                updateDetailsButtons(movieId);
+            };
+            
+            watchedBtn.onclick = () => {
+                const isWatched = currentUser.watched.includes(movieId);
+                updateMovieStatus(movieId, 'watched', !isWatched);
+                updateDetailsButtons(movieId);
+            };
+            
+            watchlistBtn.onclick = () => {
+                const inWatchlist = currentUser.watchlist.includes(movieId);
+                updateMovieStatus(movieId, 'watchlist', !inWatchlist);
+                updateDetailsButtons(movieId);
+            };
+        }
+        
+        // Обновление звезд рейтинга в деталях фильма
+        function updateDetailsRatingStars(movieId) {
+            const ratingStars = document.getElementById('detailsRatingStars');
+            const stars = ratingStars.querySelectorAll('.fa-star');
+            const userRating = getUserRating(movieId);
+            
+            // Сбрасываем активные классы
+            stars.forEach(star => {
+                star.classList.remove('active');
+            });
+            
+            // Устанавливаем активные классы в зависимости от оценки пользователя
+            stars.forEach(star => {
+                const ratingValue = parseInt(star.getAttribute('data-rating'));
+                if (ratingValue <= userRating) {
+                    star.classList.add('active');
+                }
+            });
+            
+            // Добавляем обработчики событий
+            stars.forEach(star => {
+                star.onclick = () => {
+                    if (!currentUser) {
+                        showLoginModal();
+                        return;
+                    }
+                    
+                    const ratingValue = parseInt(star.getAttribute('data-rating'));
+                    updateMovieRating(movieId, ratingValue);
+                    updateDetailsRatingStars(movieId);
+                };
+            });
         }
         
         function closeMovieDetails() {
@@ -2734,7 +3009,11 @@
                         <button class="action-btn play-btn">
                             <i class="fas fa-play"></i>
                         </button>
-                        <button class="action-btn favorite-btn"><i class="fas fa-heart"></i></button>
+                        
+                        <button class="action-btn favorite-btn">
+                            <i class="fas fa-heart"></i>
+                        </button>
+    
                         <button class="action-btn info-btn">
                             <i class="fas fa-info"></i>
                         </button>
@@ -2750,14 +3029,21 @@
                             <span>${movie.year}${movie.ageRating ? ` (${movie.ageRating})` : ''}</span>
                             <div>
                                 <span class="movie-duration"><i class="fas fa-clock"></i> ${durationText}</span>
-                                <span class="movie-rating"><i class="fas fa-star"></i> ${movie.rating}</span>
+                                <span class="movie-rating"><i class="fas fa-star"></i> ${getAverageRating(movie.googleDriveId)}</span>
                             </div>
+                        </div>
+                        <!-- Звезды для оценки -->
+                        <div class="rating-stars" data-movie-id="${movie.googleDriveId}">
+                            ${[1, 2, 3, 4, 5].map(star => `
+                                <i class="fas fa-star ${getUserRating(movie.googleDriveId) >= star ? 'active' : ''}" 
+                                   data-rating="${star}"></i>
+                            `).join('')}
                         </div>
                     </div>
                 `;
                 
                 movieElement.addEventListener('click', (e) => {
-                    if (!e.target.closest('.movie-actions')) {
+                    if (!e.target.closest('.movie-actions') && !e.target.closest('.rating-stars')) {
                         openMovieDetails(movie);
                     }
                 });
@@ -2768,8 +3054,11 @@
                     openPlayer(movie.title, movie.googleDriveId, movie.duration);
                 });
                 
-                const favoriteBtn = movieElement.querySelector('.favorite-btn');
-                favoriteBtn.addEventListener('click', (e) => {
+                const favBtn = movieElement.querySelector('.favorite-btn');
+                if (currentUser && currentUser.favorites.includes(movie.googleDriveId)) {
+                    favBtn.classList.add('active');
+                }
+                favBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (!currentUser) {
                         showLoginModal();
@@ -2777,13 +3066,36 @@
                     }
                     const isFavorite = currentUser.favorites.includes(movie.googleDriveId);
                     updateMovieStatus(movie.googleDriveId, 'favorite', !isFavorite);
-                    favoriteBtn.classList.toggle('active', !isFavorite);
+                    if (isFavorite) {
+                        favBtn.classList.remove('active');
+                    } else {
+                        favBtn.classList.add('active');
+                    }
                 });
-
+                
                 const infoBtn = movieElement.querySelector('.info-btn');
                 infoBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     openMovieDetails(movie);
+                });
+                
+                // Обработчик для звезд рейтинга
+                const starsContainer = movieElement.querySelector('.rating-stars');
+                starsContainer.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (e.target.classList.contains('fa-star')) {
+                        const rating = parseInt(e.target.getAttribute('data-rating'));
+                        updateMovieRating(movie.googleDriveId, rating);
+                        
+                        // Обновляем отображение звезд
+                        starsContainer.querySelectorAll('.fa-star').forEach((star, index) => {
+                            if (index < rating) {
+                                star.classList.add('active');
+                            } else {
+                                star.classList.remove('active');
+                            }
+                        });
+                    }
                 });
                 
                 container.appendChild(movieElement);
@@ -2854,6 +3166,22 @@
             document.querySelector('.section-title').innerHTML = `<i class="fas fa-heart"></i> Избранное`;
         }
         
+        // Обработчик клика на оценки
+        function handleRatingsClick(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            const ratedMovies = moviesData.filter(movie => 
+                currentUser.ratings && currentUser.ratings[movie.googleDriveId]
+            );
+            
+            renderMovies(ratedMovies, 'popularMovies');
+            document.querySelector('.section-title').innerHTML = `<i class="fas fa-star"></i> Мои оценки`;
+        }
+        
         // Переключение разделов
         function switchSection(section) {
             currentSection = section;
@@ -2873,6 +3201,8 @@
                 document.querySelector('.section-title').innerHTML = `<i class="fas fa-fire"></i> Популярные фильмы`;
             } else if (section === 'favorites') {
                 handleFavoritesClick({preventDefault: () => {}});
+            } else if (section === 'ratings') {
+                handleRatingsClick({preventDefault: () => {}});
             } else {
                 const filteredMovies = moviesData.filter(movie => movie.category === section);
                 renderMovies(filteredMovies, 'popularMovies');
@@ -3098,6 +3428,7 @@
             document.getElementById('favoritesCount').textContent = currentUser.favorites.length;
             document.getElementById('watchedCount').textContent = currentUser.watched.length;
             document.getElementById('watchlistCount').textContent = currentUser.watchlist.length;
+            document.getElementById('ratingsCount').textContent = currentUser.ratings ? Object.keys(currentUser.ratings).length : 0;
             
             // Загружаем фильмы для каждой вкладки
             loadProfileMovies('favorites');
@@ -3123,6 +3454,9 @@
                 movieIds = currentUser.watched;
             } else if (tab === 'watchlist') {
                 movieIds = currentUser.watchlist;
+            } else if (tab === 'ratings') {
+                // Для вкладки с оценками берем фильмы, которые пользователь оценил
+                movieIds = currentUser.ratings ? Object.keys(currentUser.ratings) : [];
             }
             
             // Фильтруем фильмы по ID
@@ -3134,20 +3468,63 @@
             if (movies.length === 0) {
                 document.getElementById(containerId).innerHTML = `
                     <div class="empty-list-message">
-                        <i class="fas fa-${tab === 'favorites' ? 'heart' : tab === 'watched' ? 'check-circle' : 'bookmark'}"></i>
+                        <i class="fas fa-${tab === 'favorites' ? 'heart' : tab === 'watched' ? 'check-circle' : tab === 'watchlist' ? 'bookmark' : 'star'}"></i>
                         <p>Список ${getTabTitle(tab)} пуст</p>
                     </div>
                 `;
             } else {
-                renderMovies(movies, containerId);
+                // Для вкладки с оценками показываем также рейтинг пользователя
+                if (tab === 'ratings') {
+                    renderMoviesWithRatings(movies, containerId);
+                } else {
+                    renderMovies(movies, containerId);
+                }
             }
+        }
+        
+        // Новая функция для отображения фильмов с оценками
+        function renderMoviesWithRatings(movies, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            movies.forEach(movie => {
+                const userRating = currentUser.ratings[movie.googleDriveId];
+                
+                const movieElement = document.createElement('div');
+                movieElement.className = 'movie-card fade-in';
+                movieElement.innerHTML = `
+                    <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${movie.year}</span>
+                            <div class="user-rating">
+                                <span>Ваша оценка: </span>
+                                <div class="rating-stars">
+                                    ${[1, 2, 3, 4, 5].map(star => `
+                                        <i class="fas fa-star ${userRating >= star ? 'active' : ''}"></i>
+                                    `).join('')}
+                                </div>
+                                <span class="rating-value">${userRating}/5</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                movieElement.addEventListener('click', () => {
+                    openMovieDetails(movie);
+                });
+                
+                container.appendChild(movieElement);
+            });
         }
         
         function getTabTitle(tab) {
             const titles = {
                 'favorites': 'избранного',
                 'watched': 'просмотренных',
-                'watchlist': 'фильмов для просмотра'
+                'watchlist': 'фильмов для просмотра',
+                'ratings': 'оцененных фильмов'
             };
             return titles[tab] || '';
         }
@@ -3248,6 +3625,11 @@
                     }
                 }
                 
+                // Инициализируем ratings, если их нет
+                if (!currentUser.ratings) {
+                    currentUser.ratings = {};
+                }
+                
                 updateUIForUser();
             }
             
@@ -3263,9 +3645,6 @@
             document.addEventListener('fullscreenchange', handlePlayerFullScreenChange);
             document.addEventListener('webkitfullscreenchange', handlePlayerFullScreenChange);
             document.addEventListener('msfullscreenchange', handlePlayerFullScreenChange);
-            
-            // Настройка двойного клика для полноэкранного режима
-            setupDoubleClickFullscreen();
             
             // Переключение категорий
             const categoryButtons = document.querySelectorAll('.category-btn');
@@ -3398,6 +3777,21 @@
                 
                 renderMovies(watchlistMovies, 'popularMovies');
                 document.querySelector('.section-title').innerHTML = `<i class="fas fa-bookmark"></i> Хочу посмотреть`;
+            });
+            
+            document.getElementById('ratingsLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!currentUser) {
+                    showLoginModal();
+                    return;
+                }
+                
+                const ratedMovies = moviesData.filter(movie => 
+                    currentUser.ratings && currentUser.ratings[movie.googleDriveId]
+                );
+                
+                renderMovies(ratedMovies, 'popularMovies');
+                document.querySelector('.section-title').innerHTML = `<i class="fas fa-star"></i> Мои оценки`;
             });
             
             // Кнопка профиля
@@ -3624,92 +4018,5 @@
             }];
         }
     </script>
-
-<script>
-(function(){
-  const openWistiaBtn = document.getElementById('openWistiaBtn');
-  if (!openWistiaBtn) return;
-  openWistiaBtn.addEventListener('click', ()=>{
-    const VIDEO_PLAYER = document.getElementById('videoPlayer');
-    const PLAYER_FRAME = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
-    if (VIDEO_PLAYER) {
-      VIDEO_PLAYER.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-    if (PLAYER_FRAME) {
-      PLAYER_FRAME.src = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
-    }
-  });
-})();
-</script>
-
-
-    <style>
-      .kz-actions { display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
-      .kz-btn {
-        background:rgba(255,0,85,0.95);
-        color:#fff;
-        border:none;
-        padding:8px 12px;
-        border-radius:6px;
-        cursor:pointer;
-        display:inline-flex;
-        gap:8px;
-        align-items:center;
-        font-size:0.95rem;
-      }
-      .kz-btn:hover { opacity:0.9; }
-      .kz-btn.active { background:#008c45; }
-      .kz-stats { margin-top:12px; font-size:0.9rem; color:#ccc; }
-    </style>
-
-    <script>
-    (function(){
-      const titleEl = document.querySelector('.details-title');
-      const animeId = titleEl ? ('kz_' + titleEl.textContent.trim().toLowerCase().replace(/\s+/g,'_')) : 'kz_item';
-      const STORAGE_KEY = 'kz_userData_v1';
-      let userData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { favorites:[], watched:[], queue:[], stats:{} };
-
-      const favBtn = document.getElementById('favoriteBtn');
-      const watchedBtn = document.getElementById('watchedBtn');
-      const queueBtn = document.getElementById('queueBtn');
-      const statsEl = document.getElementById('kz_stats');
-
-      function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(userData)); updateUI(); }
-      function updateUI(){
-        const s = userData.stats[animeId] || { views:0, lastView:'—' };
-        statsEl.innerHTML = '⭐ Избранное: ' + (userData.favorites.includes(animeId)?'Да':'Нет') + '<br>' +
-                            '👁 Просмотрено: ' + (userData.watched.includes(animeId)?'Да':'Нет') + '<br>' +
-                            '📌 В очереди: ' + (userData.queue.includes(animeId)?'Да':'Нет') + '<br>' +
-                            '🔄 Просмотров: ' + s.views + '<br>' +
-                            '⏱ Последний просмотр: ' + s.lastView;
-        favBtn.classList.toggle('active', userData.favorites.includes(animeId));
-        watchedBtn.classList.toggle('active', userData.watched.includes(animeId));
-        queueBtn.classList.toggle('active', userData.queue.includes(animeId));
-      }
-
-      favBtn.addEventListener('click', ()=>{ 
-        const i=userData.favorites.indexOf(animeId); 
-        if(i===-1) userData.favorites.push(animeId); else userData.favorites.splice(i,1); 
-        saveData(); 
-      });
-      watchedBtn.addEventListener('click', ()=>{ 
-        const i=userData.watched.indexOf(animeId); 
-        if(i===-1) userData.watched.push(animeId); else userData.watched.splice(i,1); 
-        if(!userData.stats[animeId]) userData.stats[animeId] = {views:0,lastView:'—'}; 
-        userData.stats[animeId].views++; 
-        userData.stats[animeId].lastView = new Date().toLocaleString(); 
-        saveData(); 
-      });
-      queueBtn.addEventListener('click', ()=>{ 
-        const i=userData.queue.indexOf(animeId); 
-        if(i===-1) userData.queue.push(animeId); else userData.queue.splice(i,1); 
-        saveData(); 
-      });
-
-      updateUI();
-    })();
-    </script>
-
 </body>
 </html>
