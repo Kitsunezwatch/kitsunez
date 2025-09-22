@@ -1795,43 +1795,6 @@
             gap: 10px;
             margin-top: 10px;
         }
-        
-        /* Стили для кнопок действий в деталях фильма */
-        .movie-actions-panel {
-            display: flex;
-            gap: 12px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-        
-        .movie-action-btn {
-            background: rgba(255, 94, 0, 0.95);
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-        
-        .movie-action-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .movie-action-btn.active {
-            background: #008c45;
-        }
-        
-        .movie-stats {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
     </style>
 </head>
 <body>
@@ -2029,41 +1992,13 @@
         </div>
     </main>
 
-    <!-- Видеоплеер -->
-    <div class="video-player" id="videoPlayer">
-        <div class="player-container">
-            <div class="player-header">
-                <h3 class="player-title" id="playerTitle">Название фильма</h3>
-                <button class="close-player" id="closePlayerBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="video-wrapper">
-                <div class="video-container">
-                    <iframe id="wistiaFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                </div>
-                <button class="fullscreen-btn" id="playerFullscreenBtn">
-                    <i class="fas fa-expand"></i>
-                </button>
-            </div>
-            <div class="player-controls">
-                <div class="quality-selector">
-                    <select id="qualitySelect">
-                        <option value="auto">Авто</option>
-                        <option value="1080">1080p</option>
-                        <option value="720">720p</option>
-                        <option value="480">480p</option>
-                    </select>
-                </div>
-                <div class="watch-buttons">
-                    <button class="watch-btn watch-btn-secondary" id="watchTrailerBtn">
-                        <i class="fas fa-play-circle"></i> Трейлер
-                    </button>
-                    <button class="watch-btn watch-btn-primary" id="watchMovieBtn">
-                        <i class="fas fa-film"></i> Смотреть фильм
-                    </button>
-                </div>
-            </div>
+    
+
+<!-- Wistia external script -->
+<script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
+
+
+
             
             <!-- Похожие фильмы -->
             <div class="similar-movies">
@@ -2104,21 +2039,12 @@
                 </div>
             </div>
             
-            <!-- Панель действий с фильмом -->
-            <div class="details-content">
-                <div class="movie-actions-panel">
-                    <button class="movie-action-btn" id="favoriteBtn">
-                        <i class="fas fa-heart"></i> В избранное
-                    </button>
-                    <button class="movie-action-btn" id="watchedBtn">
-                        <i class="fas fa-eye"></i> Просмотрено
-                    </button>
-                    <button class="movie-action-btn" id="watchlistBtn">
-                        <i class="fas fa-bookmark"></i> Хочу посмотреть
-                    </button>
-                </div>
-                <div class="movie-stats" id="movieStats"></div>
-                
+            
+            <!-- Встроенный плеер внутри деталей (сначала скрыт) -->
+            <div id="detailsPlayerWrap" class="video-container" style="display:none;margin:20px;padding-bottom:56.25%;position:relative;">
+                <iframe id="detailsPlayerFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
+            </div>
+<div class="details-content">
                 <h3>Описание</h3>
                 <p class="details-description" id="detailsDescription"></p>
                 
@@ -2281,9 +2207,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Wistia external script -->
-    <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
 
     <script>
         // Конфигурация
@@ -2525,36 +2448,6 @@
                 localStorage.setItem('kitsunez_users', JSON.stringify(users));
                 localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
             }
-            
-            // Обновляем UI кнопок в деталях фильма
-            updateMovieActionButtons(movieId);
-        }
-        
-        function updateMovieActionButtons(movieId) {
-            if (!currentMovieId || currentMovieId !== movieId) return;
-            
-            const favoriteBtn = document.getElementById('favoriteBtn');
-            const watchedBtn = document.getElementById('watchedBtn');
-            const watchlistBtn = document.getElementById('watchlistBtn');
-            const movieStats = document.getElementById('movieStats');
-            
-            if (currentUser) {
-                favoriteBtn.classList.toggle('active', currentUser.favorites.includes(movieId));
-                watchedBtn.classList.toggle('active', currentUser.watched.includes(movieId));
-                watchlistBtn.classList.toggle('active', currentUser.watchlist.includes(movieId));
-                
-                // Обновляем статистику
-                movieStats.innerHTML = `
-                    <div>⭐ В избранном: ${currentUser.favorites.includes(movieId) ? 'Да' : 'Нет'}</div>
-                    <div>👁 Просмотрено: ${currentUser.watched.includes(movieId) ? 'Да' : 'Нет'}</div>
-                    <div>📌 Хочу посмотреть: ${currentUser.watchlist.includes(movieId) ? 'Да' : 'Нет'}</div>
-                `;
-            } else {
-                favoriteBtn.classList.remove('active');
-                watchedBtn.classList.remove('active');
-                watchlistBtn.classList.remove('active');
-                movieStats.innerHTML = '';
-            }
         }
         
         function loadPersonalRecommendations() {
@@ -2592,11 +2485,11 @@
         function openPlayer(title, googleDriveId, duration) {
             const player = document.getElementById('videoPlayer');
             const playerTitle = document.getElementById('playerTitle');
-            const playerFrame = document.getElementById('wistiaFrame');
+            const playerFrame = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
 
             playerTitle.textContent = title;
 
-            // Всегда открываем Wistia-канал
+            // Всегда открываем Wistia-канал, как вы просили
             const wistiaUrl = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
             if (playerFrame) {
                 playerFrame.src = wistiaUrl;
@@ -2622,7 +2515,7 @@
 
         function closePlayer() {
             const player = document.getElementById('videoPlayer');
-            const playerFrame = document.getElementById('wistiaFrame');
+            const playerFrame = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
 
             if (player) {
                 player.style.display = 'none';
@@ -2753,9 +2646,22 @@
                 loginToComment.style.display = 'block';
             }
             
-            // Обновляем кнопки действий с фильмом
-            updateMovieActionButtons(movie.googleDriveId);
-            
+
+            // Установим поведение кнопки "Смотреть" в деталях: показать встроенный плеер (Wistia) внутри модалки деталей
+            if (playBtn) {
+                playBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    const dp = document.getElementById('detailsPlayerWrap');
+                    const df = document.getElementById('detailsPlayerFrame');
+                    const wistiaUrl = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
+                    if (df) df.src = wistiaUrl;
+                    if (dp) dp.style.display = 'block';
+                    // прокрутить к плееру внутри модалки
+                    setTimeout(() => {
+                        dp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 200);
+                };
+            }
             details.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
@@ -2828,6 +2734,7 @@
                         <button class="action-btn play-btn">
                             <i class="fas fa-play"></i>
                         </button>
+                        <button class="action-btn favorite-btn"><i class="fas fa-heart"></i></button>
                         <button class="action-btn info-btn">
                             <i class="fas fa-info"></i>
                         </button>
@@ -2861,6 +2768,18 @@
                     openPlayer(movie.title, movie.googleDriveId, movie.duration);
                 });
                 
+                const favoriteBtn = movieElement.querySelector('.favorite-btn');
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (!currentUser) {
+                        showLoginModal();
+                        return;
+                    }
+                    const isFavorite = currentUser.favorites.includes(movie.googleDriveId);
+                    updateMovieStatus(movie.googleDriveId, 'favorite', !isFavorite);
+                    favoriteBtn.classList.toggle('active', !isFavorite);
+                });
+
                 const infoBtn = movieElement.querySelector('.info-btn');
                 infoBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -3432,9 +3351,6 @@
                     
                     commentForm.style.display = 'none';
                     loginToComment.style.display = 'block';
-                    
-                    // Обновляем кнопки действий
-                    updateMovieActionButtons(currentMovieId);
                 }
             });
             
@@ -3671,28 +3587,6 @@
             document.getElementById('manageUsersBtn').addEventListener('click', function() {
                 alert('Функция управления пользователями будет реализована в будущем обновлении!');
             });
-            
-            // Кнопки действий с фильмом в деталях
-            document.getElementById('favoriteBtn').addEventListener('click', function() {
-                if (!currentMovieId) return;
-                
-                const isActive = this.classList.contains('active');
-                updateMovieStatus(currentMovieId, 'favorite', !isActive);
-            });
-            
-            document.getElementById('watchedBtn').addEventListener('click', function() {
-                if (!currentMovieId) return;
-                
-                const isActive = this.classList.contains('active');
-                updateMovieStatus(currentMovieId, 'watched', !isActive);
-            });
-            
-            document.getElementById('watchlistBtn').addEventListener('click', function() {
-                if (!currentMovieId) return;
-                
-                const isActive = this.classList.contains('active');
-                updateMovieStatus(currentMovieId, 'watchlist', !isActive);
-            });
         });
 
         // Эмуляция YouTube API
@@ -3730,5 +3624,92 @@
             }];
         }
     </script>
+
+<script>
+(function(){
+  const openWistiaBtn = document.getElementById('openWistiaBtn');
+  if (!openWistiaBtn) return;
+  openWistiaBtn.addEventListener('click', ()=>{
+    const VIDEO_PLAYER = document.getElementById('videoPlayer');
+    const PLAYER_FRAME = document.getElementById('wistiaFrame') || document.getElementById('playerFrame');
+    if (VIDEO_PLAYER) {
+      VIDEO_PLAYER.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    if (PLAYER_FRAME) {
+      PLAYER_FRAME.src = "https://fast.wistia.net/embed/channel/11fu58s4dv?wchannelid=11fu58s4dv&wmediaid=ul4a4br5ck";
+    }
+  });
+})();
+</script>
+
+
+    <style>
+      .kz-actions { display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
+      .kz-btn {
+        background:rgba(255,0,85,0.95);
+        color:#fff;
+        border:none;
+        padding:8px 12px;
+        border-radius:6px;
+        cursor:pointer;
+        display:inline-flex;
+        gap:8px;
+        align-items:center;
+        font-size:0.95rem;
+      }
+      .kz-btn:hover { opacity:0.9; }
+      .kz-btn.active { background:#008c45; }
+      .kz-stats { margin-top:12px; font-size:0.9rem; color:#ccc; }
+    </style>
+
+    <script>
+    (function(){
+      const titleEl = document.querySelector('.details-title');
+      const animeId = titleEl ? ('kz_' + titleEl.textContent.trim().toLowerCase().replace(/\s+/g,'_')) : 'kz_item';
+      const STORAGE_KEY = 'kz_userData_v1';
+      let userData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { favorites:[], watched:[], queue:[], stats:{} };
+
+      const favBtn = document.getElementById('favoriteBtn');
+      const watchedBtn = document.getElementById('watchedBtn');
+      const queueBtn = document.getElementById('queueBtn');
+      const statsEl = document.getElementById('kz_stats');
+
+      function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(userData)); updateUI(); }
+      function updateUI(){
+        const s = userData.stats[animeId] || { views:0, lastView:'—' };
+        statsEl.innerHTML = '⭐ Избранное: ' + (userData.favorites.includes(animeId)?'Да':'Нет') + '<br>' +
+                            '👁 Просмотрено: ' + (userData.watched.includes(animeId)?'Да':'Нет') + '<br>' +
+                            '📌 В очереди: ' + (userData.queue.includes(animeId)?'Да':'Нет') + '<br>' +
+                            '🔄 Просмотров: ' + s.views + '<br>' +
+                            '⏱ Последний просмотр: ' + s.lastView;
+        favBtn.classList.toggle('active', userData.favorites.includes(animeId));
+        watchedBtn.classList.toggle('active', userData.watched.includes(animeId));
+        queueBtn.classList.toggle('active', userData.queue.includes(animeId));
+      }
+
+      favBtn.addEventListener('click', ()=>{ 
+        const i=userData.favorites.indexOf(animeId); 
+        if(i===-1) userData.favorites.push(animeId); else userData.favorites.splice(i,1); 
+        saveData(); 
+      });
+      watchedBtn.addEventListener('click', ()=>{ 
+        const i=userData.watched.indexOf(animeId); 
+        if(i===-1) userData.watched.push(animeId); else userData.watched.splice(i,1); 
+        if(!userData.stats[animeId]) userData.stats[animeId] = {views:0,lastView:'—'}; 
+        userData.stats[animeId].views++; 
+        userData.stats[animeId].lastView = new Date().toLocaleString(); 
+        saveData(); 
+      });
+      queueBtn.addEventListener('click', ()=>{ 
+        const i=userData.queue.indexOf(animeId); 
+        if(i===-1) userData.queue.push(animeId); else userData.queue.splice(i,1); 
+        saveData(); 
+      });
+
+      updateUI();
+    })();
+    </script>
+
 </body>
 </html>
