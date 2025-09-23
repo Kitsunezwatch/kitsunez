@@ -18,6 +18,8 @@
             --primary-color: #ff5e00;
             --secondary-color: #8a2be2;
             --admin-color: #ff3366;
+            --achievement-color: #ffd700;
+            --live-color: #00ff00;
             --dark-bg: #0f0f0f;
             --medium-bg: #1a1a1a;
             --light-bg: #2a2a2a;
@@ -1612,6 +1614,7 @@
             margin-bottom: 20px;
             border-bottom: 1px solid var(--light-bg);
             padding-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .profile-tab {
@@ -1868,12 +1871,278 @@
             background: var(--primary-color);
             color: white;
         }
+        
+        /* Стили для системы достижений */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .achievement-card {
+            background: var(--medium-bg);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.6;
+            filter: grayscale(1);
+        }
+        
+        .achievement-card.unlocked {
+            border: 2px solid var(--achievement-color);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--achievement-color);
+        }
+        
+        .achievement-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .achievement-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .achievement-progress {
+            height: 4px;
+            background: var(--light-bg);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-progress-bar {
+            height: 100%;
+            background: var(--achievement-color);
+            transition: width 0.5s ease;
+        }
+        
+        .achievement-progress-text {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        
+        .achievement-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--achievement-color);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .level-system {
+            background: var(--medium-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .level-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .level-number {
+            color: var(--achievement-color);
+            font-size: 1.5rem;
+        }
+        
+        .level-progress {
+            height: 10px;
+            background: var(--light-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .level-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--achievement-color));
+            transition: width 0.5s ease;
+        }
+        
+        .level-exp {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--medium-bg);
+            border-left: 4px solid var(--achievement-color);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+            animation: slideInRight 0.5s ease;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .achievement-notification.unlocked {
+            border-left-color: var(--achievement-color);
+        }
+        
+        .notification-icon {
+            font-size: 1.5rem;
+            color: var(--achievement-color);
+            margin-right: 10px;
+        }
+        
+        .notification-content h4 {
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .notification-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+        
+        /* Стили для блока "Сейчас смотрят" */
+        .live-activity {
+            background: var(--medium-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .live-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .live-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--live-color);
+            border-radius: 50%;
+            animation: pulse-live 2s infinite;
+        }
+        
+        @keyframes pulse-live {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+        }
+        
+        .live-users {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .live-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .live-user:hover {
+            background: var(--primary-color);
+        }
+        
+        .live-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .live-user-info {
+            flex: 1;
+        }
+        
+        .live-user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+        
+        .live-user-movie {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .live-user-time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        
+        .no-live-users {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .no-live-users i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
     <!-- Индикатор полноэкранного режима -->
     <div class="fullscreen-indicator" id="fullscreenIndicator">
         <i class="fas fa-expand"></i> Полноэкранный режим
+    </div>
+
+    <!-- Уведомление о достижении -->
+    <div class="achievement-notification" id="achievementNotification">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-trophy notification-icon"></i>
+            <div class="notification-content">
+                <h4 id="notificationTitle">Достижение разблокировано!</h4>
+                <p id="notificationDesc">Описание достижения</p>
+            </div>
+        </div>
     </div>
 
     <!-- Шапка -->
@@ -1954,6 +2223,17 @@
 
     <!-- Основное содержимое -->
     <main class="container">
+        <!-- Блок "Сейчас смотрят" -->
+        <div class="live-activity" id="liveActivity" style="display: none;">
+            <div class="live-header">
+                <div class="live-indicator"></div>
+                <h2 class="section-title"><i class="fas fa-eye"></i> Сейчас смотрят</h2>
+            </div>
+            <div class="live-users" id="liveUsersList">
+                <!-- Активные пользователи будут загружены здесь -->
+            </div>
+        </div>
+
         <!-- Категории -->
         <div class="categories">
             <button class="category-btn active" data-category="all">Все</button>
@@ -2262,6 +2542,29 @@
                     <div class="stat-value" id="ratingsCount">0</div>
                     <div class="stat-label">Оценок поставлено</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="achievementsCount">0</div>
+                    <div class="stat-label">Достижений</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="userLevel">1</div>
+                    <div class="stat-label">Уровень</div>
+                </div>
+            </div>
+
+            <!-- Система уровней -->
+            <div class="level-system">
+                <div class="level-info">
+                    <div class="level-text">Уровень <span class="level-number" id="currentLevel">1</span></div>
+                    <div id="currentExp">0/100 XP</div>
+                </div>
+                <div class="level-progress">
+                    <div class="level-progress-bar" id="levelProgressBar" style="width: 0%"></div>
+                </div>
+                <div class="level-exp">
+                    <span>0 XP</span>
+                    <span id="nextLevelExp">100 XP</span>
+                </div>
             </div>
 
             <div class="profile-tabs">
@@ -2269,6 +2572,7 @@
                 <button class="profile-tab" data-tab="watched">Просмотрено</button>
                 <button class="profile-tab" data-tab="watchlist">Хочу посмотреть</button>
                 <button class="profile-tab" data-tab="ratings">Мои оценки</button>
+                <button class="profile-tab" data-tab="achievements">Достижения</button>
             </div>
 
             <div class="tab-content active" id="favoritesTab">
@@ -2292,6 +2596,12 @@
             <div class="tab-content" id="ratingsTab">
                 <div class="movie-grid" id="profileRatingsList">
                     <!-- Фильмы с оценками будут загружены динамически -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="achievementsTab">
+                <div class="achievements-grid" id="achievementsList">
+                    <!-- Достижения будут загружены динамически -->
                 </div>
             </div>
         </div>
@@ -2360,8 +2670,171 @@
         let comments = JSON.parse(localStorage.getItem('kitsunez_comments')) || [];
         let currentMovieId = null;
 
+        // Система активных сеансов
+        let activeSessions = JSON.parse(localStorage.getItem('kitsunez_active_sessions')) || [];
+        
         // ID администратора
         const ADMIN_USER_ID = '1758400830708';
+
+        // Система достижений
+        const achievementsData = [
+            {
+                id: 'first_movie',
+                title: 'Первый просмотр',
+                description: 'Посмотрите свой первый фильм на платформе',
+                icon: 'fas fa-film',
+                xp: 50,
+                condition: (user) => user.watched.length >= 1,
+                progress: (user) => Math.min(user.watched.length, 1)
+            },
+            {
+                id: 'movie_marathon',
+                title: 'Киномарафон',
+                description: 'Посмотрите 10 фильмов',
+                icon: 'fas fa-play-circle',
+                xp: 100,
+                condition: (user) => user.watched.length >= 10,
+                progress: (user) => Math.min(user.watched.length, 10)
+            },
+            {
+                id: 'film_critic',
+                title: 'Кинокритик',
+                description: 'Поставьте оценки 10 фильмам',
+                icon: 'fas fa-star',
+                xp: 150,
+                condition: (user) => user.ratings && Object.keys(user.ratings).length >= 10,
+                progress: (user) => user.ratings ? Math.min(Object.keys(user.ratings).length, 10) : 0
+            },
+            {
+                id: 'favorite_collector',
+                title: 'Коллекционер избранного',
+                description: 'Добавьте 5 фильмов в избранное',
+                icon: 'fas fa-heart',
+                xp: 75,
+                condition: (user) => user.favorites.length >= 5,
+                progress: (user) => Math.min(user.favorites.length, 5)
+            },
+            {
+                id: 'commentator',
+                title: 'Комментатор',
+                description: 'Оставьте 5 комментариев',
+                icon: 'fas fa-comment',
+                xp: 80,
+                condition: (user) => comments.filter(c => c.userId === user.id).length >= 5,
+                progress: (user) => Math.min(comments.filter(c => c.userId === user.id).length, 5)
+            },
+            {
+                id: 'anime_lover',
+                title: 'Любитель аниме',
+                description: 'Посмотрите 3 аниме-фильма',
+                icon: 'fas fa-dragon',
+                xp: 120,
+                condition: (user) => {
+                    const animeMovies = moviesData.filter(m => m.category === 'anime');
+                    return user.watched.filter(id => animeMovies.some(m => m.googleDriveId === id)).length >= 3;
+                },
+                progress: (user) => {
+                    const animeMovies = moviesData.filter(m => m.category === 'anime');
+                    return Math.min(user.watched.filter(id => animeMovies.some(m => m.googleDriveId === id)).length, 3);
+                }
+            },
+            {
+                id: 'weekend_viewer',
+                title: 'Зритель выходного дня',
+                description: 'Посмотрите фильмы в три разных дня',
+                icon: 'fas fa-calendar-week',
+                xp: 90,
+                condition: (user) => {
+                    // Простая проверка - если просмотрено более 3 фильмов, считаем что в разные дни
+                    return user.watched.length >= 3;
+                },
+                progress: (user) => Math.min(user.watched.length, 3)
+            },
+            {
+                id: 'social_butterfly',
+                title: 'Социальная бабочка',
+                description: 'Получите 5 лайков на ваших комментариях',
+                icon: 'fas fa-users',
+                xp: 110,
+                condition: (user) => {
+                    const userComments = comments.filter(c => c.userId === user.id);
+                    const totalLikes = userComments.reduce((sum, comment) => sum + comment.likes.length, 0);
+                    return totalLikes >= 5;
+                },
+                progress: (user) => {
+                    const userComments = comments.filter(c => c.userId === user.id);
+                    const totalLikes = userComments.reduce((sum, comment) => sum + comment.likes.length, 0);
+                    return Math.min(totalLikes, 5);
+                }
+            },
+            {
+                id: 'explorer',
+                title: 'Исследователь',
+                description: 'Посмотрите фильмы из 3 разных категорий',
+                icon: 'fas fa-compass',
+                xp: 130,
+                condition: (user) => {
+                    const categoriesWatched = new Set();
+                    user.watched.forEach(movieId => {
+                        const movie = moviesData.find(m => m.googleDriveId === movieId);
+                        if (movie) categoriesWatched.add(movie.category);
+                    });
+                    return categoriesWatched.size >= 3;
+                },
+                progress: (user) => {
+                    const categoriesWatched = new Set();
+                    user.watched.forEach(movieId => {
+                        const movie = moviesData.find(m => m.googleDriveId === movieId);
+                        if (movie) categoriesWatched.add(movie.category);
+                    });
+                    return Math.min(categoriesWatched.size, 3);
+                }
+            },
+            {
+                id: 'night_owl',
+                title: 'Ночная сова',
+                description: 'Посмотрите фильм после 22:00',
+                icon: 'fas fa-moon',
+                xp: 70,
+                condition: (user) => {
+                    // Простая проверка - если пользователь активен, считаем что смотрел ночью
+                    return user.watched.length > 0;
+                },
+                progress: (user) => user.watched.length > 0 ? 1 : 0
+            },
+            {
+                id: 'quality_seeker',
+                title: 'Ценитель качества',
+                description: 'Поставьте 5 звезд 3 разным фильмам',
+                icon: 'fas fa-crown',
+                xp: 200,
+                condition: (user) => {
+                    if (!user.ratings) return false;
+                    const fiveStarRatings = Object.values(user.ratings).filter(rating => rating === 5);
+                    return fiveStarRatings.length >= 3;
+                },
+                progress: (user) => {
+                    if (!user.ratings) return 0;
+                    const fiveStarRatings = Object.values(user.ratings).filter(rating => rating === 5);
+                    return Math.min(fiveStarRatings.length, 3);
+                }
+            },
+            {
+                id: 'completionist',
+                title: 'Завершитель',
+                description: 'Получите все достижения',
+                icon: 'fas fa-trophy',
+                xp: 500,
+                condition: (user) => {
+                    if (!user.achievements) return false;
+                    return user.achievements.unlocked.length >= achievementsData.length - 1; // -1 потому что это достижение не считается
+                },
+                progress: (user) => {
+                    if (!user.achievements) return 0;
+                    return Math.min(user.achievements.unlocked.length, achievementsData.length - 1);
+                }
+            }
+        ];
 
         // Функции для работы с полноэкранным режимом
         function toggleFullscreenSite() {
@@ -2450,6 +2923,12 @@
                 watched: [],
                 watchlist: [],
                 ratings: {}, // Новое поле для оценок
+                achievements: {
+                    unlocked: [],
+                    progress: {}
+                },
+                experience: 0,
+                level: 1,
                 preferences: {
                     genres: [],
                     minRating: 0
@@ -2477,6 +2956,20 @@
                 if (!currentUser.ratings) {
                     currentUser.ratings = {};
                 }
+                // Инициализируем achievements, если их нет
+                if (!currentUser.achievements) {
+                    currentUser.achievements = {
+                        unlocked: [],
+                        progress: {}
+                    };
+                }
+                // Инициализируем experience и level, если их нет
+                if (!currentUser.experience) {
+                    currentUser.experience = 0;
+                }
+                if (!currentUser.level) {
+                    currentUser.level = 1;
+                }
                 localStorage.setItem('kitsunez_current_user', JSON.stringify(user));
                 updateUIForUser();
                 closeModal('loginModal');
@@ -2488,6 +2981,11 @@
         }
         
         function logoutUser() {
+            // Завершаем активный сеанс пользователя
+            if (currentUser) {
+                endUserSession(currentUser.id);
+            }
+            
             currentUser = null;
             localStorage.removeItem('kitsunez_current_user');
             updateUIForUser();
@@ -2499,6 +2997,7 @@
             const adminSection = document.getElementById('adminSection');
             const adminLink = document.getElementById('adminLink');
             const adminDivider = document.getElementById('adminDivider');
+            const liveActivity = document.getElementById('liveActivity');
             
             if (currentUser) {
                 authButtons.style.display = 'none';
@@ -2530,11 +3029,16 @@
                 
                 document.getElementById('personalSection').style.display = 'flex';
                 loadPersonalRecommendations();
+                
+                // Показываем блок "Сейчас смотрят" для авторизованных пользователей
+                liveActivity.style.display = 'block';
+                updateLiveActivity();
             } else {
                 authButtons.style.display = 'flex';
                 userProfile.style.display = 'none';
                 adminSection.style.display = 'none';
                 document.getElementById('personalSection').style.display = 'none';
+                liveActivity.style.display = 'none';
             }
         }
         
@@ -2561,6 +3065,9 @@
             if (add) {
                 if (!currentUser[listName].includes(movieId)) {
                     currentUser[listName].push(movieId);
+                    
+                    // Проверяем достижения при добавлении в списки
+                    checkAchievements();
                 }
             } else {
                 currentUser[listName] = currentUser[listName].filter(id => id !== movieId);
@@ -2606,6 +3113,12 @@
             }
             
             currentUser.ratings[movieId] = rating;
+            
+            // Начисляем опыт за оценку
+            addExperience(10);
+            
+            // Проверяем достижения
+            checkAchievements();
             
             // Сохраняем в общем списке пользователей
             const userIndex = users.findIndex(u => u.id === currentUser.id);
@@ -2697,6 +3210,15 @@
             if (typeof currentUser !== 'undefined' && currentUser) {
                 try {
                     updateMovieStatus(googleDriveId, 'watched', true);
+                    
+                    // Начинаем сеанс просмотра
+                    startUserSession(currentUser.id, googleDriveId, title);
+                    
+                    // Начисляем опыт за просмотр
+                    addExperience(20);
+                    
+                    // Проверяем достижения
+                    checkAchievements();
                 } catch (e) {
                     console.warn('updateMovieStatus error:', e);
                 }
@@ -2729,6 +3251,11 @@
                 } else if (document.msExitFullscreen) {
                     document.msExitFullscreen();
                 }
+            }
+            
+            // Завершаем сеанс просмотра
+            if (currentUser) {
+                endUserSession(currentUser.id);
             }
         }
 
@@ -3229,6 +3756,12 @@
             comments.push(newComment);
             localStorage.setItem('kitsunez_comments', JSON.stringify(comments));
             
+            // Начисляем опыт за комментарий
+            addExperience(5);
+            
+            // Проверяем достижения
+            checkAchievements();
+            
             return true;
         }
         
@@ -3429,9 +3962,17 @@
             document.getElementById('watchedCount').textContent = currentUser.watched.length;
             document.getElementById('watchlistCount').textContent = currentUser.watchlist.length;
             document.getElementById('ratingsCount').textContent = currentUser.ratings ? Object.keys(currentUser.ratings).length : 0;
+            document.getElementById('achievementsCount').textContent = currentUser.achievements ? currentUser.achievements.unlocked.length : 0;
+            document.getElementById('userLevel').textContent = currentUser.level || 1;
+            
+            // Обновляем систему уровней
+            updateLevelSystem();
             
             // Загружаем фильмы для каждой вкладки
             loadProfileMovies('favorites');
+            
+            // Загружаем достижения
+            loadAchievements();
             
             // Показываем модальное окно
             document.getElementById('profileModal').style.display = 'flex';
@@ -3528,6 +4069,244 @@
             };
             return titles[tab] || '';
         }
+        
+        // Функции для системы достижений
+        function checkAchievements() {
+            if (!currentUser) return;
+            
+            let newAchievements = [];
+            
+            achievementsData.forEach(achievement => {
+                // Пропускаем достижение "Завершитель", так как оно зависит от других достижений
+                if (achievement.id === 'completionist') return;
+                
+                // Проверяем, не получено ли уже достижение
+                if (currentUser.achievements.unlocked.includes(achievement.id)) return;
+                
+                // Проверяем условие достижения
+                if (achievement.condition(currentUser)) {
+                    // Разблокируем достижение
+                    currentUser.achievements.unlocked.push(achievement.id);
+                    newAchievements.push(achievement);
+                    
+                    // Начисляем опыт за достижение
+                    addExperience(achievement.xp);
+                }
+            });
+            
+            // Проверяем достижение "Завершитель" отдельно
+            const completionistAchievement = achievementsData.find(a => a.id === 'completionist');
+            if (completionistAchievement && 
+                !currentUser.achievements.unlocked.includes('completionist') && 
+                completionistAchievement.condition(currentUser)) {
+                
+                currentUser.achievements.unlocked.push('completionist');
+                newAchievements.push(completionistAchievement);
+                
+                // Начисляем опыт за достижение
+                addExperience(completionistAchievement.xp);
+            }
+            
+            // Сохраняем изменения
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('kitsunez_users', JSON.stringify(users));
+                localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
+            }
+            
+            // Показываем уведомления о новых достижениях
+            newAchievements.forEach(achievement => {
+                showAchievementNotification(achievement);
+            });
+            
+            // Обновляем UI, если открыто модальное окно профиля
+            if (document.getElementById('profileModal').style.display === 'flex') {
+                loadAchievements();
+                updateLevelSystem();
+            }
+        }
+        
+        function loadAchievements() {
+            const achievementsList = document.getElementById('achievementsList');
+            achievementsList.innerHTML = '';
+            
+            achievementsData.forEach(achievement => {
+                const isUnlocked = currentUser.achievements.unlocked.includes(achievement.id);
+                const progress = achievement.progress(currentUser);
+                const maxProgress = achievement.condition.toString().match(/\d+/)?.[0] || 1;
+                const progressPercent = (progress / maxProgress) * 100;
+                
+                const achievementElement = document.createElement('div');
+                achievementElement.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                achievementElement.innerHTML = `
+                    ${isUnlocked ? '<div class="achievement-badge"><i class="fas fa-check"></i></div>' : ''}
+                    <div class="achievement-icon">
+                        <i class="${achievement.icon}"></i>
+                    </div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-desc">${achievement.description}</div>
+                    ${!isUnlocked ? `
+                    <div class="achievement-progress">
+                        <div class="achievement-progress-bar" style="width: ${progressPercent}%"></div>
+                    </div>
+                    <div class="achievement-progress-text">${progress}/${maxProgress}</div>
+                    ` : ''}
+                    ${isUnlocked ? `<div class="achievement-progress-text"><i class="fas fa-star"></i> +${achievement.xp} XP</div>` : ''}
+                `;
+                
+                achievementsList.appendChild(achievementElement);
+            });
+        }
+        
+        function showAchievementNotification(achievement) {
+            const notification = document.getElementById('achievementNotification');
+            const title = document.getElementById('notificationTitle');
+            const desc = document.getElementById('notificationDesc');
+            
+            title.textContent = achievement.title;
+            desc.textContent = achievement.description;
+            
+            notification.style.display = 'block';
+            notification.className = 'achievement-notification unlocked';
+            
+            // Автоматически скрываем уведомление через 5 секунд
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+        
+        function addExperience(amount) {
+            if (!currentUser) return;
+            
+            currentUser.experience += amount;
+            
+            // Проверяем, не повысился ли уровень
+            const expForNextLevel = currentUser.level * 100;
+            if (currentUser.experience >= expForNextLevel) {
+                currentUser.level++;
+                currentUser.experience -= expForNextLevel;
+                
+                // Показываем уведомление о повышении уровня
+                showLevelUpNotification();
+            }
+            
+            // Сохраняем изменения
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('kitsunez_users', JSON.stringify(users));
+                localStorage.setItem('kitsunez_current_user', JSON.stringify(currentUser));
+            }
+            
+            // Обновляем UI, если открыто модальное окно профиля
+            if (document.getElementById('profileModal').style.display === 'flex') {
+                updateLevelSystem();
+            }
+        }
+        
+        function updateLevelSystem() {
+            const currentLevel = document.getElementById('currentLevel');
+            const currentExp = document.getElementById('currentExp');
+            const levelProgressBar = document.getElementById('levelProgressBar');
+            const nextLevelExp = document.getElementById('nextLevelExp');
+            
+            if (!currentUser) return;
+            
+            const expForNextLevel = currentUser.level * 100;
+            const progressPercent = (currentUser.experience / expForNextLevel) * 100;
+            
+            currentLevel.textContent = currentUser.level;
+            currentExp.textContent = `${currentUser.experience}/${expForNextLevel} XP`;
+            levelProgressBar.style.width = `${progressPercent}%`;
+            nextLevelExp.textContent = `${expForNextLevel} XP`;
+        }
+        
+        function showLevelUpNotification() {
+            const notification = document.getElementById('achievementNotification');
+            const title = document.getElementById('notificationTitle');
+            const desc = document.getElementById('notificationDesc');
+            
+            title.textContent = `Уровень повышен!`;
+            desc.textContent = `Поздравляем! Вы достигли ${currentUser.level} уровня.`;
+            
+            notification.style.display = 'block';
+            notification.className = 'achievement-notification unlocked';
+            
+            // Автоматически скрываем уведомление через 5 секунд
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Функции для блока "Сейчас смотрят"
+        function startUserSession(userId, movieId, movieTitle) {
+            // Завершаем предыдущий сеанс пользователя, если есть
+            endUserSession(userId);
+            
+            const newSession = {
+                userId: userId,
+                movieId: movieId,
+                movieTitle: movieTitle,
+                startTime: Date.now()
+            };
+            
+            activeSessions.push(newSession);
+            localStorage.setItem('kitsunez_active_sessions', JSON.stringify(activeSessions));
+            
+            // Обновляем отображение активных сеансов
+            updateLiveActivity();
+        }
+        
+        function endUserSession(userId) {
+            activeSessions = activeSessions.filter(session => session.userId !== userId);
+            localStorage.setItem('kitsunez_active_sessions', JSON.stringify(activeSessions));
+            
+            // Обновляем отображение активных сеансов
+            updateLiveActivity();
+        }
+        
+        function updateLiveActivity() {
+            const liveUsersList = document.getElementById('liveUsersList');
+            
+            // Очищаем устаревшие сеансы (старше 15 минут)
+            const fifteenMinutesAgo = Date.now() - (15 * 60 * 1000);
+            activeSessions = activeSessions.filter(session => session.startTime > fifteenMinutesAgo);
+            localStorage.setItem('kitsunez_active_sessions', JSON.stringify(activeSessions));
+            
+            if (activeSessions.length === 0) {
+                liveUsersList.innerHTML = `
+                    <div class="no-live-users">
+                        <i class="fas fa-user-slash"></i>
+                        <p>Сейчас никто не смотрит фильмы</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            liveUsersList.innerHTML = '';
+            
+            activeSessions.forEach(session => {
+                const user = users.find(u => u.id === session.userId);
+                if (!user) return;
+                
+                const sessionElement = document.createElement('div');
+                sessionElement.className = 'live-user';
+                sessionElement.innerHTML = `
+                    <img src="https://i.ibb.co/Sht7vLz/favicon.png" alt="${user.name}" class="live-user-avatar">
+                    <div class="live-user-info">
+                        <div class="live-user-name">${user.name}</div>
+                        <div class="live-user-movie">${session.movieTitle}</div>
+                    </div>
+                    <div class="live-user-time">${Math.round((Date.now() - session.startTime) / 60000)} мин. назад</div>
+                `;
+                
+                liveUsersList.appendChild(sessionElement);
+            });
+        }
+        
+        // Автоматическое обновление блока "Сейчас смотрят"
+        setInterval(updateLiveActivity, 60000); // Каждую минуту
         
         // Функции для админ-панели
         function showModerationPanel() {
@@ -3628,6 +4407,22 @@
                 // Инициализируем ratings, если их нет
                 if (!currentUser.ratings) {
                     currentUser.ratings = {};
+                }
+                
+                // Инициализируем achievements, если их нет
+                if (!currentUser.achievements) {
+                    currentUser.achievements = {
+                        unlocked: [],
+                        progress: {}
+                    };
+                }
+                
+                // Инициализируем experience и level, если их нет
+                if (!currentUser.experience) {
+                    currentUser.experience = 0;
+                }
+                if (!currentUser.level) {
+                    currentUser.level = 1;
                 }
                 
                 updateUIForUser();
